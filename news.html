@@ -1,0 +1,464 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>新闻中心 | AI Terminal PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#060b10;--bg2:#0c1520;--bg3:#101a28;--bgC:#0e1622;--bd:#162030;--bdA:#264060;--tx:#d0dae6;--tx2:#7088a0;--tx3:#405060;--ac:#ff6a00;--acG:rgba(255,106,0,0.3);--up:#ff1744;--upB:rgba(255,23,68,0.15);--dn:#00c853;--dnB:rgba(0,200,83,0.15);--bl:#2979ff;--ye:#ffd600;--pu:#aa00ff;--cy:#00e5ff;--fm:'JetBrains Mono','Consolas',monospace;--fs:'Noto Sans SC','Microsoft YaHei',sans-serif;--r:4px;--rL:6px;--sh:0 2px 12px rgba(0,0,0,0.5);--tr:0.15s ease}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:var(--fs);font-size:12px;line-height:1.4;overflow-x:hidden;overflow-y:auto;min-height:100vh}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background-image:linear-gradient(rgba(255,255,255,0.01) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.01) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:0}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--bdA)}
+.nav{position:relative;z-index:100;height:42px;background:var(--bg2);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 12px;gap:14px;backdrop-filter:blur(20px)}
+.nav-logo{font-family:var(--fm);font-size:13px;font-weight:700;color:var(--ac);letter-spacing:1px;display:flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none}
+.nav-logo .dot{width:7px;height:7px;background:var(--ac);border-radius:50%;box-shadow:0 0 8px var(--acG);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.nav-links{display:flex;gap:2px;margin-left:20px}
+.nav-link{padding:5px 12px;font-size:10px;color:var(--tx3);text-decoration:none;border-radius:var(--r);transition:all var(--tr);font-family:var(--fs);white-space:nowrap}
+.nav-link:hover{color:var(--tx);background:var(--bg3)}
+.nav-link.act{color:var(--ac);background:rgba(255,106,0,0.1)}
+.nav-status{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx3);margin-left:auto}
+.nav-status .ind{width:6px;height:6px;border-radius:50%;background:var(--up);box-shadow:0 0 6px rgba(255,23,68,0.5);animation:pulse 2s infinite}
+.nav-clock{font-family:var(--fm);font-size:11px;color:var(--tx2)}
+.btn{background:var(--bg3);border:1px solid var(--bd);color:var(--tx);padding:4px 10px;border-radius:var(--r);font-family:var(--fm);font-size:10px;cursor:pointer;transition:all var(--tr);display:flex;align-items:center;gap:4px;white-space:nowrap}
+.btn:hover{background:var(--bdA);border-color:var(--ac);box-shadow:0 0 10px var(--acG)}
+.btn-ac{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
+.btn-ac:hover{background:#ff8533}
+.main{position:relative;z-index:1;padding:6px;display:grid;grid-template-columns:1fr 340px;gap:6px;min-height:calc(100vh - 42px)}
+.card{background:var(--bgC);border:1px solid var(--bd);border-radius:var(--rL);overflow:hidden;box-shadow:var(--sh)}
+.card-hd{display:flex;align-items:center;justify-content:space-between;padding:5px 10px;background:var(--bg2);border-bottom:1px solid var(--bd);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--tx2);min-height:28px}
+.card-hd .d{width:7px;height:7px;border-radius:50%;margin-right:5px}
+.card-hd-l{display:flex;align-items:center;gap:5px}
+.card-bd{padding:6px 8px}
+.card-bd0{padding:0}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--bd);flex-wrap:wrap}
+.tab{padding:5px 12px;font-size:10px;font-weight:500;color:var(--tx3);cursor:pointer;border-bottom:2px solid transparent;transition:all var(--tr);background:none;border-top:none;border-left:none;border-right:none;font-family:var(--fs);white-space:nowrap}
+.tab:hover{color:var(--tx)}
+.tab.act{color:var(--ac);border-bottom-color:var(--ac)}
+.news-list{display:flex;flex-direction:column;gap:0;overflow-y:auto;max-height:calc(100vh - 120px)}
+.news-item{display:flex;gap:8px;padding:8px 10px;border-left:2px solid transparent;border-bottom:1px solid rgba(22,32,48,0.3);cursor:pointer;transition:all var(--tr)}
+.news-item:hover{background:rgba(255,255,255,0.02);border-left-color:var(--ac)}
+.news-item .ni-left{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:40px}
+.news-item .ni-time{font-family:var(--fm);font-size:9px;color:var(--tx3);text-align:center}
+.news-item .ni-sentiment{font-size:7px;padding:1px 4px;border-radius:2px;font-weight:600;text-align:center;white-space:nowrap}
+.ni-positive{background:var(--upB);color:var(--up)}.ni-negative{background:var(--dnB);color:var(--dn)}.ni-neutral{background:rgba(255,255,255,0.05);color:var(--tx3)}
+.news-item .ni-main{flex:1;min-width:0}
+.news-item .ni-title{font-size:11px;font-weight:500;color:var(--tx);line-height:1.4;margin-bottom:3px}
+.news-item .ni-title:hover{color:var(--ac)}
+.news-item.important-news .ni-title:hover{color:var(--up)}
+.news-item .ni-intro{font-size:9px;color:var(--tx3);line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.news-item .ni-tags{display:flex;gap:3px;flex-wrap:wrap;margin-top:4px}
+.ni-tag{font-size:8px;padding:1px 5px;border-radius:2px;background:var(--bg3);color:var(--tx2);border:1px solid var(--bd);white-space:nowrap}
+.ni-source{font-size:8px;color:var(--tx3);margin-top:2px;font-family:var(--fm)}
+.hot-panel{display:flex;flex-direction:column;gap:6px}
+.hot-card{background:var(--bgC);border:1px solid var(--bd);border-radius:var(--rL);overflow:hidden}
+.hot-card .card-hd .d{background:var(--ye);box-shadow:0 0 6px rgba(255,214,0,0.5)}
+.hot-tags{display:flex;flex-wrap:wrap;gap:4px;padding:6px}
+.hot-tag{padding:3px 8px;background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);font-size:9px;color:var(--tx2);cursor:pointer;transition:all var(--tr);font-family:var(--fs);white-space:nowrap}
+.hot-tag:hover{background:var(--bdA);border-color:var(--ac);color:var(--tx)}
+.hot-tag.rank-1{border-color:var(--up);color:var(--up);background:var(--upB)}
+.hot-tag.rank-2{border-color:var(--ac);color:var(--ac)}
+.hot-tag.rank-3{border-color:var(--bl);color:var(--bl)}
+.load{display:flex;align-items:center;justify-content:center;padding:30px;color:var(--tx3);font-family:var(--fm);font-size:11px}
+.load::after{content:'';width:14px;height:14px;border:2px solid var(--bd);border-top-color:var(--ac);border-radius:50%;animation:spin 0.8s linear infinite;margin-left:8px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.up{color:var(--up)}.down{color:var(--dn)}.flat{color:var(--tx2)}
+@media(max-width:900px){.main{grid-template-columns:1fr}.news-list{max-height:none}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="terminal.html" class="nav-logo"><span class="dot"></span>AI TERMINAL<span style="font-weight:400;color:var(--tx3);font-size:10px">PRO</span></a>
+  <div class="nav-links">
+    <a href="terminal.html" class="nav-link">投研平台</a>
+    <a href="sector-flow.html" class="nav-link">板块资金</a>
+    <a href="stock-analysis.html" class="nav-link">个股分析</a>
+    <a href="news.html" class="nav-link act">新闻中心</a>
+    <a href="动动脑.html" class="nav-link">动动脑</a>
+  </div>
+  <span style="flex:1"></span>
+  <div class="nav-status" id="nav-status"><span class="ind" id="status-ind"></span><span id="status-text">就绪</span></div>
+  <div class="nav-clock" id="clock">--</div>
+  <button class="btn btn-ac" onclick="refreshNews()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>刷新</button>
+</nav>
+
+<div class="main">
+  <!-- 左侧新闻列表 -->
+  <div class="card" style="display:flex;flex-direction:column">
+    <div class="card-hd">
+      <div class="card-hd-l"><span class="d" style="background:var(--ac);box-shadow:0 0 6px var(--acG)"></span>新闻中心</div>
+      <div class="tabs" id="news-tabs" style="border:none">
+        <button class="tab act" data-cat="important">重点</button>
+        <button class="tab" data-cat="tech">科技</button>
+        <button class="tab" data-cat="global">全球</button>
+        <button class="tab" data-cat="macro">宏观</button>
+        <button class="tab" data-cat="finance">财经</button>
+        <button class="tab" data-cat="tonghuashun">同花顺</button>
+      </div>
+    </div>
+    <div class="card-bd0"><div class="news-list" id="news-list"><div class="load">加载中</div></div></div>
+  </div>
+
+  <!-- 右侧面板 -->
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <div class="hot-card">
+      <div class="card-hd"><div class="card-hd-l"><span class="d"></span>热搜关键词</div><span style="font-size:9px;color:var(--tx3)" id="hot-time">--</span></div>
+      <div class="hot-tags" id="hot-tags"><div class="load">分析中</div></div>
+    </div>
+    <div class="hot-card">
+      <div class="card-hd"><div class="card-hd-l"><span class="d" style="background:var(--cy);box-shadow:0 0 6px rgba(0,229,255,0.5)"></span>市场情绪</div></div>
+      <div class="card-bd" id="sentiment-panel"><div class="load">分析中</div></div>
+    </div>
+    <div class="hot-card" style="flex:1">
+      <div class="card-hd"><div class="card-hd-l"><span class="d" style="background:var(--pu);box-shadow:0 0 6px rgba(170,0,255,0.5)"></span>相关板块</div></div>
+      <div class="card-bd" id="related-sectors"><div class="load">分析中</div></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// 新闻中心 v1.0
+// ============================================================
+
+let state={category:'important',news:[],allNews:{},sourceStatus:null};
+
+// 时钟
+setInterval(()=>{
+  const d=new Date();
+  document.getElementById('clock').textContent=d.toLocaleDateString('zh-CN')+' '+d.toLocaleTimeString('zh-CN',{hour12:false});
+},1000);
+
+// 代理
+function createTimeout(ms){
+  if(typeof AbortSignal!=='undefined'&&AbortSignal.timeout)return AbortSignal.timeout(ms);
+  const ctrl=new AbortController();setTimeout(()=>ctrl.abort(),ms);return ctrl.signal;
+}
+
+function normalizeNewsItems(dto){
+  const payload=dto&&dto.data?dto.data:{};
+  const rawItems=payload.items||payload.news||dto.items||dto.news||payload.data||[];
+  return Array.isArray(rawItems)?rawItems:[];
+}
+
+function classifyNewsItem(item){
+  const text=((item.title||'')+' '+(item.intro||item.summary||'')+' '+(item.source||'')).toLowerCase();
+  if(/10jqka|同花顺|财联社|金十/.test(text))return 'tonghuashun';
+  if(/央行|财政|统计局|宏观|cpi|ppi|gdp|pmi|利率|汇率|通胀|就业|税|关税/.test(text))return 'macro';
+  if(/a股|港股|美股|券商|银行|基金|期货|保险|证券|财经|市场/.test(text))return 'finance';
+  if(/ai|芯片|半导体|算力|机器人|新能源|光伏|锂电|汽车|医药|消费电子|光模块|cpo|5g|6g|商业航天|低空经济/.test(text))return 'tech';
+  if(/路透|彭博|日经|全球|海外|国际|美国|欧洲|日本|韩国|亚太/.test(text))return 'global';
+  return 'important';
+}
+
+function filterNewsByCategory(items, cat){
+  if(cat === 'important'){
+    return [...items].sort((a,b)=>{
+      const ai=(a.importance||0)+(a.sentiment==='positive'?10:0)+(a.sentiment==='negative'?-5:0);
+      const bi=(b.importance||0)+(b.sentiment==='positive'?10:0)+(b.sentiment==='negative'?-5:0);
+      return bi-ai || b.time-a.time;
+    }).slice(0,25);
+  }
+  const filtered=items.filter(item=>classifyNewsItem(item)===cat);
+  return filtered.length>0 ? filtered : items.slice(0,15);
+}
+
+// 情感分析
+function analyzeSentiment(text){
+  const pos=['利好','大涨','突破','涨停','增长','盈利','回购','分红','政策','支持','获批','中标','超预期','创新高','增持','预增','突破','扩张','合作','签约','上线','发布','量产','落地','开放','放宽','刺激','复苏','回暖','反弹'];
+  const neg=['利空','暴跌','跌停','亏损','减持','违规','调查','处罚','退市','爆雷','诉讼','下滑','不及预期','崩盘','制裁','冲突','衰退','危机','警告','下调','萎缩','裁员','关闭','召回','诉讼','罚款','违约','暴雷'];
+  let s=0;pos.forEach(w=>{if(text.includes(w))s+=0.5});neg.forEach(w=>{if(text.includes(w))s-=0.5});
+  return s>0.5?'positive':s<-0.5?'negative':'neutral';
+}
+
+// 提取标签
+function extractTags(text){
+  const tags=[];const kw=['AI','半导体','芯片','新能源','光伏','锂电','军工','机器人','算力','消费电子','汽车','医药','银行','券商','地产','黄金','低空经济','商业航天','光模块','CPO','华为','小米','特斯拉','DeepSeek','5G','自动驾驶','量子','储能','电力','通信','6G','A股','港股','美股','ETF','期货','原油','美元','人民币','美联储','央行','GDP','CPI','PMI','关税','贸易','选举','峰会','冲突','制裁'];
+  kw.forEach(k=>{if(text.includes(k))tags.push(k)});return tags.slice(0,4);
+}
+
+// 时间格式化
+function fmtTime(ts){
+  if(!ts)return'';
+  const d=new Date(parseInt(ts)*1000);
+  const now=new Date();const diff=now-d;
+  if(diff<3600000)return Math.floor(diff/60000)+'分钟前';
+  if(diff<86400000)return Math.floor(diff/3600000)+'小时前';
+  return d.toLocaleDateString('zh-CN',{month:'2-digit',day:'2-digit'})+' '+d.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
+}
+
+function escAttr(s){
+  return String(s||'').replace(/&/g,'&amp;').replace(/'/g,'&#39;').replace(/"/g,'&quot;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+// 获取新闻
+async function fetchNewsByCategory(cat){
+  const endpoints=[
+    '/api/news?cat='+encodeURIComponent(cat),
+  ];
+  const errors=[];
+  for(const url of endpoints){
+    try{
+      const resp=await fetch(url,{signal:createTimeout(25000)});
+      if(!resp.ok)throw new Error('HTTP '+resp.status);
+      const dto=await resp.json();
+      const payload=dto&&dto.data?dto.data:{};
+      const items=normalizeNewsItems(dto).map(item=>({
+        id:item.id||item.url||item.title,
+        title:item.title||'',
+        time:Number(item.time||Math.floor(Date.now()/1000)),
+        timeStr:item.timeStr||fmtTime(item.time||Math.floor(Date.now()/1000)),
+        url:item.url||'#',
+        intro:item.intro||item.summary||'',
+        sentiment:item.sentiment||analyzeSentiment((item.title||'')+' '+(item.summary||'')),
+        tags:item.tags||extractTags((item.title||'')+' '+(item.summary||'')),
+        source:item.source||'新闻源',
+        importance:Number(item.importance||0),
+        impactedSector:item.impactedSector||''
+      }));
+      items.sort((a,b)=>(b.importance-a.importance)||(b.time-a.time));
+      state.sourceStatus={
+        source:dto.source||payload.source||url.replace(/\?.*$/,'').replace('/api/',''),
+        stale:!!(dto.stale||payload.stale),
+        freshness:dto.freshness||payload.freshness||'realtime',
+        errors:dto.errors||payload.errors||[],
+      };
+      const scoped=filterNewsByCategory(items, cat);
+      return scoped.length>0?scoped:getFallbackNews(cat);
+    }catch(e){
+      errors.push({url,message:e.message});
+    }
+  }
+  console.warn('DataHub news failed',errors.map(e=>e.message).join(' | '));
+  state.sourceStatus={source:'新闻聚合',stale:true,freshness:'unavailable',errors};
+  return getFallbackNews(cat);
+}
+
+// 离线降级：本地新闻数据
+function getFallbackNews(cat){
+  const now=Math.floor(Date.now()/1000);
+  const SOURCE_LINKS={
+    'AI简报':'https://finance.sina.com.cn/',
+    '科技日报':'https://www.stdaily.com/',
+    '集微网':'https://www.laoyaoba.com/',
+    '半导体行业观察':'https://www.icbank.cc/',
+    '财联社':'https://www.cls.cn/telegraph',
+    '新华社':'https://www.news.cn/',
+    'C114通信网':'https://www.c114.com.cn/',
+    '36氪':'https://36kr.com/',
+    '华尔街见闻':'https://wallstreetcn.com/',
+    '澎湃新闻':'https://www.thepaper.cn/',
+    '路透社':'https://www.reuters.com/',
+    '日经新闻':'https://www.nikkei.com/',
+    '彭博社':'https://www.bloomberg.com/',
+    '日经亚洲':'https://asia.nikkei.com/',
+    '金融时报':'https://www.ft.com/',
+    '央行官网':'https://www.pbc.gov.cn/',
+    '国家统计局':'https://www.stats.gov.cn/',
+    '财政部':'https://www.mof.gov.cn/',
+    '住建部':'https://www.mohurd.gov.cn/',
+    '工信部':'https://www.miit.gov.cn/',
+    '海关总署':'http://www.customs.gov.cn/',
+    '证券时报':'https://www.stcn.com/',
+    '上交所':'https://www.sse.com.cn/',
+    'Wind':'https://www.wind.com.cn/',
+    '基金业协会':'https://www.amac.org.cn/',
+    '中国证券报':'https://www.cs.com.cn/',
+    '证监会':'https://www.csrc.gov.cn/',
+    '券商中国':'https://www.stcn.com/',
+    '同花顺':'https://news.10jqka.com.cn/',
+    '金十数据':'https://www.jin10.com/',
+  };
+  const NEWS={tech:[
+    {title:'实时新闻源暂不可用：点击进入新浪财经科技频道',intro:'当前网络或上游接口未返回可解析新闻，页面不生成模板新闻。可点击来源入口继续查看。',sentiment:'neutral',tags:['科技','新闻源'],source:'新浪财经'},
+    {title:'实时新闻源暂不可用：点击进入财联社电报',intro:'财联社是本页新闻聚合源之一；上游恢复后会自动回到实时列表。',sentiment:'neutral',tags:['财联社','新闻源'],source:'财联社'},
+    {title:'实时新闻源暂不可用：点击进入同花顺财经',intro:'同花顺快讯接口不可用时展示来源入口，不把静态内容伪装成实时新闻。',sentiment:'neutral',tags:['同花顺','新闻源'],source:'同花顺'},
+  ],global:[
+    {title:'实时新闻源暂不可用：点击进入路透国际财经',intro:'全球新闻接口暂未返回可解析内容，点击打开来源网站。',sentiment:'neutral',tags:['全球','新闻源'],source:'路透社'},
+    {title:'实时新闻源暂不可用：点击进入日经亚洲',intro:'亚太市场新闻源入口，上游恢复后页面自动显示实时结果。',sentiment:'neutral',tags:['亚太','新闻源'],source:'日经亚洲'},
+    {title:'实时新闻源暂不可用：点击进入彭博',intro:'当前仅展示来源入口，避免静态占位新闻误导判断。',sentiment:'neutral',tags:['全球','新闻源'],source:'彭博社'},
+  ],macro:[
+    {title:'实时新闻源暂不可用：点击进入央行官网',intro:'宏观新闻接口暂未返回可解析内容，点击查看官方来源。',sentiment:'neutral',tags:['央行','官方源'],source:'央行官网'},
+    {title:'实时新闻源暂不可用：点击进入国家统计局',intro:'统计数据和宏观发布以官方页面为准。',sentiment:'neutral',tags:['统计局','官方源'],source:'国家统计局'},
+    {title:'实时新闻源暂不可用：点击进入财政部',intro:'财政政策新闻源入口，上游恢复后自动切回实时聚合。',sentiment:'neutral',tags:['财政部','官方源'],source:'财政部'},
+  ],finance:[
+    {title:'实时新闻源暂不可用：点击进入新浪财经',intro:'财经新闻接口暂未返回可解析内容，点击来源入口查看。',sentiment:'neutral',tags:['A股','新闻源'],source:'新浪财经'},
+    {title:'实时新闻源暂不可用：点击进入证券时报',intro:'市场新闻源入口；本页不使用伪实时模板新闻。',sentiment:'neutral',tags:['市场','新闻源'],source:'证券时报'},
+    {title:'实时新闻源暂不可用：点击进入证监会',intro:'监管与公告类信息建议以官方来源为准。',sentiment:'neutral',tags:['监管','官方源'],source:'证监会'},
+  ],tonghuashun:[
+    {title:'同花顺实时接口暂不可用：点击进入同花顺财经',intro:'上游接口恢复后会自动显示同花顺实时推送。',sentiment:'neutral',tags:['同花顺','新闻源'],source:'同花顺'},
+  ],important:[
+    {title:'重点新闻源暂不可用：点击进入同花顺财经',intro:'同花顺实时推送是本页重点新闻源之一，上游恢复后会自动显示推送标题。',sentiment:'neutral',tags:['同花顺','重点'],source:'同花顺'},
+    {title:'重点新闻源暂不可用：点击进入金十数据',intro:'金十快讯用于补充宏观、商品和全球市场重大推送。',sentiment:'neutral',tags:['金十','重点'],source:'金十数据'},
+    {title:'重点新闻源暂不可用：点击进入财联社电报',intro:'财联社电报作为A股和产业事件源，接口恢复后会重新进入聚合列表。',sentiment:'neutral',tags:['财联社','重点'],source:'财联社'},
+  ]};
+  const items=NEWS[cat]||NEWS.tech;
+  return items.map((n,i)=>({
+    id:'fallback_'+cat+'_'+i,
+    title:n.title,
+    time:now-i*3600,
+    timeStr:fmtTime(now-i*3600),
+    url:SOURCE_LINKS[n.source]||SOURCE_LINKS['新浪财经']||'https://finance.sina.com.cn/',
+    intro:n.intro||'',
+    sentiment:n.sentiment,
+    tags:n.tags||[],
+    source:n.source||'本地简报',
+  }));
+}
+
+// 渲染新闻列表
+function renderNews(){
+  const el=document.getElementById('news-list');
+  const news=state.news;
+  if(!news||news.length===0){el.innerHTML='<div class="load">暂无新闻</div>';return;}
+  // 过滤：标题长度>15字 且 有摘要内容
+  const filtered=news.filter(item=>item.title.length>6);
+  const important=filtered.filter(item=>(item.importance||0)>=30||item.sentiment==='positive'&&item.tags.length>0);
+  const sourceText=state.sourceStatus&&state.sourceStatus.source?state.sourceStatus.source:'DataHub新闻聚合';
+  setStatus((state.sourceStatus&&state.sourceStatus.stale?'缓存 ':'实时 ')+filtered.length+'条 · '+sourceText,filtered.length>0&&!((state.sourceStatus||{}).stale));
+  el.innerHTML=filtered.map((item,i)=>{
+    const sentCls='ni-'+item.sentiment;
+    const sentLabel=item.sentiment==='positive'?'利好':item.sentiment==='negative'?'利空':'中性';
+    const isImp=(item.importance||0)>=30||item.sentiment==='positive'&&item.tags.length>0;
+    var href=item.url&&item.url!=='#'?item.url:(item.source==='同花顺'?'https://news.10jqka.com.cn/':'https://finance.sina.com.cn/');
+    return `<div class="news-item${isImp?' important-news':''}" onclick="window.open('${escAttr(href)}','_blank')" style="${isImp?'border-left:2px solid var(--up);background:rgba(255,23,68,0.04)':''}">
+      <div class="ni-left">
+        <span class="ni-time">${item.timeStr}</span>
+        <span class="ni-sentiment ${sentCls}">${sentLabel}</span>
+      </div>
+      <div class="ni-main">
+        <div class="ni-title" style="${isImp?'color:var(--up);font-weight:700':''}">${item.title}</div>
+        ${item.intro?`<div class="ni-intro">${item.intro}</div>`:''}
+        <div class="ni-tags">${item.tags.map(t=>`<span class="ni-tag" style="${isImp?'background:var(--upB);color:var(--up);border-color:var(--up)':''}">${t}</span>`).join('')}</div>
+        <div class="ni-source">${item.source}${item.importance?' · 重要度 '+item.importance:''}${item.impactedSector?' · '+item.impactedSector:''}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// 渲染热搜
+function renderHotTags(){
+  const allTags={};
+  state.news.forEach(item=>{
+    item.tags.forEach(tag=>{allTags[tag]=(allTags[tag]||0)+1;});
+  });
+  const sorted=Object.entries(allTags).sort((a,b)=>b[1]-a[1]).slice(0,20);
+  document.getElementById('hot-tags').innerHTML=sorted.map((t,i)=>{
+    const rk=i<3?'rank-'+(i+1):'';
+    return `<span class="hot-tag ${rk}">${t[0]}<span style="font-size:7px;color:var(--tx3);margin-left:3px">${t[1]}</span></span>`;
+  }).join('');
+  document.getElementById('hot-time').textContent=new Date().toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});
+}
+
+// 渲染情绪面板
+function renderSentiment(){
+  const pos=state.news.filter(n=>n.sentiment==='positive').length;
+  const neg=state.news.filter(n=>n.sentiment==='negative').length;
+  const neu=state.news.filter(n=>n.sentiment==='neutral').length;
+  const total=state.news.length||1;
+  document.getElementById('sentiment-panel').innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:9px;color:var(--tx3);width:40px">利好</span>
+        <div style="flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden"><div style="height:100%;width:${(pos/total*100).toFixed(0)}%;background:var(--up);border-radius:3px;transition:width 0.5s"></div></div>
+        <span style="font-family:var(--fm);font-size:10px;color:var(--up);width:30px;text-align:right">${pos}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:9px;color:var(--tx3);width:40px">利空</span>
+        <div style="flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden"><div style="height:100%;width:${(neg/total*100).toFixed(0)}%;background:var(--dn);border-radius:3px;transition:width 0.5s"></div></div>
+        <span style="font-family:var(--fm);font-size:10px;color:var(--dn);width:30px;text-align:right">${neg}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-size:9px;color:var(--tx3);width:40px">中性</span>
+        <div style="flex:1;height:6px;background:var(--bg3);border-radius:3px;overflow:hidden"><div style="height:100%;width:${(neu/total*100).toFixed(0)}%;background:var(--tx3);border-radius:3px;transition:width 0.5s"></div></div>
+        <span style="font-family:var(--fm);font-size:10px;color:var(--tx3);width:30px;text-align:right">${neu}</span>
+      </div>
+      <div style="font-size:9px;color:var(--tx3);text-align:center;margin-top:4px">
+        综合情绪: <span style="font-weight:600;color:${pos>neg?'var(--up)':neg>pos?'var(--dn)':'var(--tx2)'}">${pos>neg?'偏多':neg>pos?'偏空':'中性'} ${Math.abs(pos-neg)}条</span>
+      </div>
+    </div>`;
+}
+
+// 渲染相关板块
+function renderRelatedSectors(){
+  const sectorMap={};
+  const sectorKeywords={
+    'AI硬件':['AI','算力','GPU','芯片','光模块','CPO','服务器'],
+    '半导体':['半导体','芯片','晶圆','光刻','封装','存储','HBM','EDA'],
+    '新能源':['新能源','光伏','储能','风电','锂电','电池','充电桩','氢能'],
+    '机器人':['机器人','人形','自动化','机器视觉','传感器'],
+    '低空经济':['低空','eVTOL','无人机','飞行汽车','通航'],
+    '通信':['5G','6G','通信','光纤','光缆','基站','卫星'],
+    '汽车':['汽车','新能源车','自动驾驶','智能驾驶','特斯拉','比亚迪'],
+    '消费电子':['消费电子','手机','穿戴','VR','AR','苹果','华为'],
+    '医药':['医药','医疗','创新药','CXO','器械','生物'],
+    '金融':['银行','券商','保险','多元金融','数字货币'],
+    '地产':['房地产','地产','开发','物业','基建'],
+    '军工':['军工','航天','国防','导弹','战机'],
+    '有色':['有色','黄金','铜','铝','稀土','锂矿'],
+    '商业航天':['航天','火箭','卫星','太空','星链'],
+  };
+  state.news.forEach(item=>{
+    const text=item.title+' '+(item.intro||'');
+    Object.entries(sectorKeywords).forEach(([sector,kws])=>{
+      if(kws.some(k=>text.includes(k)))sectorMap[sector]=(sectorMap[sector]||0)+1;
+    });
+  });
+  const sorted=Object.entries(sectorMap).sort((a,b)=>b[1]-a[1]).slice(0,10);
+  const el=document.getElementById('related-sectors');
+  if(sorted.length===0){el.innerHTML='<div style="font-size:10px;color:var(--tx3);padding:10px">暂无关联板块</div>';return;}
+  el.innerHTML=sorted.map(s=>{
+    const pct=(s[1]/Math.max(...sorted.map(x=>x[1]))*100).toFixed(0);
+    return `<div style="display:flex;align-items:center;gap:6px;padding:3px 0;font-size:10px">
+      <span style="width:60px;color:var(--tx2);font-family:var(--fs);white-space:nowrap">${s[0]}</span>
+      <div style="flex:1;height:4px;background:var(--bg3);border-radius:2px;overflow:hidden"><div style="height:100%;width:${pct}%;background:var(--ac);border-radius:2px"></div></div>
+      <span style="font-family:var(--fm);font-size:9px;color:var(--tx3);width:20px;text-align:right">${s[1]}</span>
+    </div>`;
+  }).join('');
+}
+
+// 切换分类
+async function switchCategory(cat){
+  state.category=cat;
+  document.querySelectorAll('#news-tabs .tab').forEach(t=>t.classList.remove('act'));
+  const tab=document.querySelector('#news-tabs [data-cat="'+cat+'"]');
+  if(tab)tab.classList.add('act');
+  document.getElementById('news-list').innerHTML='<div class="load">加载中</div>';
+  state.news=await fetchNewsByCategory(cat);
+  renderNews();renderHotTags();renderSentiment();renderRelatedSectors();
+  setStatus('已加载 '+state.news.length+' 条',state.news.length>0&&!((state.sourceStatus||{}).stale));
+}
+
+// 刷新
+async function refreshNews(){
+  document.getElementById('news-list').innerHTML='<div class="load">加载中</div>';
+  setStatus('刷新中...',false);
+  state.news=await fetchNewsByCategory(state.category);
+  renderNews();renderHotTags();renderSentiment();renderRelatedSectors();
+  setStatus('已更新 '+state.news.length+' 条',state.news.length>0&&!((state.sourceStatus||{}).stale));
+}
+
+function setStatus(t,ok){
+  document.getElementById('status-text').textContent=t;
+  const si=document.getElementById('status-ind');
+  si.style.background=ok?'var(--up)':'var(--ye)';
+  si.style.boxShadow=ok?'0 0 6px rgba(255,23,68,0.5)':'0 0 6px rgba(255,214,0,0.5)';
+}
+
+// 事件
+document.getElementById('news-tabs').addEventListener('click',e=>{
+  if(e.target.classList.contains('tab'))switchCategory(e.target.dataset.cat);
+});
+
+// 初始化
+switchCategory('important');
+</script>
+</body>
+</html>
+

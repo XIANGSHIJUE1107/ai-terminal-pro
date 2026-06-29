@@ -1,0 +1,19 @@
+{
+  "source": "mootdx/TDX > Tencent > 百度K线 > 东财(限流) > 同花顺 > 新浪 > 巨潮cninfo",
+  "updatedAt": "2026-06-25 14:41:34",
+  "asOf": "2026-06-25",
+  "status": "ok",
+  "raw": {},
+  "normalized": {
+    "refresh": {
+      "last_update_time": "2026-06-25 14:31:33",
+      "next_update_time": "2026-06-25 14:41:33",
+      "refresh_interval_seconds": 600,
+      "status": "running",
+      "last_error": null,
+      "is_refreshing": true
+    }
+  },
+  "analysis": {},
+  "errors": []
+}

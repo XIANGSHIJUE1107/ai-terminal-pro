@@ -1,0 +1,17 @@
+{
+  "source": "腾讯K线 > 百度K线 > AKShare > local-db",
+  "updatedAt": "2026-06-24 18:56:13",
+  "asOf": "2026-06-23",
+  "freshness": "unavailable",
+  "stale": true,
+  "unavailable": true,
+  "errors": [],
+  "data": {
+    "symbol": "sz000636",
+    "scale": 240,
+    "items": [],
+    "kline": [],
+    "indicators": {}
+  },
+  "items": []
+}

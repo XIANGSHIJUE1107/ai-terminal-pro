@@ -1,0 +1,152 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+:root {
+  --terminal-bg: #0a0e17;
+  --terminal-card: #111827;
+  --terminal-border: #1e293b;
+  --terminal-accent: #f0b90b;
+  --terminal-accent-blue: #0ea5e9;
+  --terminal-green: #00c853;
+  --terminal-red: #ff1744;
+  --terminal-text: #e2e8f0;
+  --terminal-muted: #64748b;
+  --terminal-hover: #1e3a5f;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: var(--terminal-bg);
+  color: var(--terminal-text);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar - Bloomberg Style */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--terminal-bg);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--terminal-border);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--terminal-muted);
+}
+
+/* Number animation */
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-number {
+  animation: countUp 0.4s ease-out;
+}
+
+/* Glow pulse for accent elements */
+.glow-accent {
+  box-shadow: 0 0 15px rgba(240, 185, 11, 0.15);
+}
+.glow-blue {
+  box-shadow: 0 0 15px rgba(14, 165, 233, 0.15);
+}
+
+/* Grid background pattern */
+.bg-grid {
+  background-image:
+    linear-gradient(rgba(30, 41, 59, 0.3) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 41, 59, 0.3) 1px, transparent 1px);
+  background-size: 20px 20px;
+}
+
+/* Card styles */
+.card-terminal {
+  @apply bg-terminal-card border border-terminal-border rounded-lg;
+}
+.card-terminal:hover {
+  border-color: var(--terminal-hover);
+  transition: border-color 0.2s ease;
+}
+
+/* Button styles */
+.btn-accent {
+  @apply px-4 py-2 bg-terminal-accent/10 text-terminal-accent border border-terminal-accent/30 rounded-lg
+         hover:bg-terminal-accent/20 transition-all duration-200 font-medium text-sm;
+}
+.btn-blue {
+  @apply px-4 py-2 bg-terminal-accent-blue/10 text-terminal-accent-blue border border-terminal-accent-blue/30 rounded-lg
+         hover:bg-terminal-accent-blue/20 transition-all duration-200 font-medium text-sm;
+}
+
+/* Monospace data display */
+.font-mono-data {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-feature-settings: "tnum";
+}
+
+/* Price change colors */
+.price-up { color: var(--terminal-green); }
+.price-down { color: var(--terminal-red); }
+.price-neutral { color: var(--terminal-muted); }
+
+/* News ticker */
+.news-ticker-container {
+  overflow: hidden;
+  white-space: nowrap;
+  border-bottom: 1px solid var(--terminal-border);
+  background: var(--terminal-card);
+}
+.news-ticker-track {
+  display: inline-block;
+  animation: ticker 40s linear infinite;
+}
+.news-ticker-track:hover {
+  animation-play-state: paused;
+}
+
+/* K-line chart placeholder height */
+.kline-container {
+  min-height: 500px;
+}
+
+/* Dashboard grid */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto;
+  gap: 1rem;
+}
+
+@media (max-width: 1400px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Sentiment badge */
+.sentiment-extreme-optimistic { background: rgba(0, 200, 83, 0.2); color: #00c853; }
+.sentiment-optimistic { background: rgba(0, 200, 83, 0.1); color: #69f0ae; }
+.sentiment-neutral { background: rgba(240, 185, 11, 0.1); color: #f0b90b; }
+.sentiment-cautious { background: rgba(255, 152, 0, 0.1); color: #ff9800; }
+.sentiment-panic { background: rgba(255, 23, 68, 0.2); color: #ff1744; }

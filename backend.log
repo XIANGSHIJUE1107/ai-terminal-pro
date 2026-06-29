@@ -1,0 +1,4 @@
+[Server] 初始化数据库...
+[DB] 数据库初始化完成: D:\营业部分析\backend\stock_platform.db
+[Server] AI智能投研分析平台启动完成
+INFO:     127.0.0.1:40899 - "GET /api/health HTTP/1.1" 200 OK

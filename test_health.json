@@ -1,0 +1,64 @@
+{
+  "status": "ok",
+  "platform": "AI智能投研分析平台",
+  "version": "V3.2.4",
+  "service": "DataHub 七层架构",
+  "source": "mootdx/TDX > Tencent > 百度K线 > 东财(限流) > 同花顺 > 新浪 > 巨潮cninfo",
+  "updatedAt": "2026-06-23 19:47:34",
+  "asOf": "2026-06-23",
+  "freshness": "scheduled-cache",
+  "stale": false,
+  "unavailable": false,
+  "errors": [],
+  "refresh": {
+    "last_update_time": "2026-06-23 19:47:34",
+    "next_update_time": "2026-06-23 19:57:34",
+    "refresh_interval_seconds": 600,
+    "status": "ok",
+    "last_error": null,
+    "is_refreshing": false
+  },
+  "last_update_time": "2026-06-23 19:47:34",
+  "next_update_time": "2026-06-23 19:57:34",
+  "refresh_interval_seconds": 600,
+  "last_error": null,
+  "rate_limiter": {
+    "failures": {},
+    "circuits": {}
+  },
+  "data_sources": {
+    "行情层": {
+      "mootdx": true,
+      "tencent": true,
+      "baidu": true
+    },
+    "研报层": {
+      "eastmoney_report": true,
+      "tonghuashun": true,
+      "iwencai": true
+    },
+    "信号层": {
+      "tonghuashun": true,
+      "eastmoney": true
+    },
+    "资金面": {
+      "eastmoney_datacenter": true,
+      "eastmoney_push2": true
+    },
+    "新闻层": {
+      "eastmoney_http": true,
+      "sina": true,
+      "tonghuashun": true
+    },
+    "基础数据": {
+      "mootdx_f10": true,
+      "eastmoney": true,
+      "sina": true
+    },
+    "公告层": {
+      "cninfo": true,
+      "mootdx": true,
+      "eastmoney": true
+    }
+  }
+}

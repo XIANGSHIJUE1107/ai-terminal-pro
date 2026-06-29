@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>动动脑 | AI Terminal PRO</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<script src="stock_data.js"></script>
+<style>
+:root{--bg:#060b10;--bg2:#0c1520;--bg3:#101a28;--bgC:#0e1622;--bd:#162030;--bdA:#264060;--tx:#d0dae6;--tx2:#7088a0;--tx3:#405060;--ac:#ff6a00;--acG:rgba(255,106,0,0.3);--up:#ff1744;--upB:rgba(255,23,68,0.15);--dn:#00c853;--dnB:rgba(0,200,83,0.15);--bl:#2979ff;--ye:#ffd600;--pu:#aa00ff;--cy:#00e5ff;--fm:'JetBrains Mono','Consolas',monospace;--fs:'Noto Sans SC','Microsoft YaHei',sans-serif;--r:4px;--rL:6px;--sh:0 2px 12px rgba(0,0,0,0.5);--tr:0.15s ease}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--tx);font-family:var(--fs);font-size:12px;line-height:1.4;overflow-x:hidden;overflow-y:auto;min-height:100vh}
+body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background-image:linear-gradient(rgba(255,255,255,0.01) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.01) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:0}
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
+::-webkit-scrollbar-thumb:hover{background:var(--bdA)}
+.nav{position:relative;z-index:100;height:42px;background:var(--bg2);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 12px;gap:14px;backdrop-filter:blur(20px)}
+.nav-logo{font-family:var(--fm);font-size:13px;font-weight:700;color:var(--ac);letter-spacing:1px;display:flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none}
+.nav-logo .dot{width:7px;height:7px;background:var(--ac);border-radius:50%;box-shadow:0 0 8px var(--acG);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+.nav-links{display:flex;gap:2px;margin-left:20px}
+.nav-link{padding:5px 12px;font-size:10px;color:var(--tx3);text-decoration:none;border-radius:var(--r);transition:all var(--tr);font-family:var(--fs);white-space:nowrap}
+.nav-link:hover{color:var(--tx);background:var(--bg3)}
+.nav-link.act{color:var(--ac);background:rgba(255,106,0,0.1)}
+.nav-status{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx3);margin-left:auto}
+.nav-status .ind{width:6px;height:6px;border-radius:50%;background:var(--up);box-shadow:0 0 6px rgba(255,23,68,0.5);animation:pulse 2s infinite}
+.nav-clock{font-family:var(--fm);font-size:11px;color:var(--tx2)}
+.btn{background:var(--bg3);border:1px solid var(--bd);color:var(--tx);padding:4px 10px;border-radius:var(--r);font-family:var(--fm);font-size:10px;cursor:pointer;transition:all var(--tr);display:inline-flex;align-items:center;gap:4px;white-space:nowrap;text-decoration:none}
+.btn:hover{background:var(--bdA);border-color:var(--ac);box-shadow:0 0 10px var(--acG)}
+.btn-ac{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
+.btn-ac:hover{background:#ff8533}
+.btn-sm{padding:2px 6px;font-size:9px}
+.btn-danger{background:rgba(255,23,68,0.1);border-color:rgba(255,23,68,0.3);color:var(--up)}
+.btn-danger:hover{background:rgba(255,23,68,0.25);border-color:var(--up)}
+.main{position:relative;z-index:1;padding:8px;display:flex;flex-direction:column;gap:6px;max-width:1200px;margin:0 auto;min-height:calc(100vh - 42px)}
+.card{background:var(--bgC);border:1px solid var(--bd);border-radius:var(--rL);overflow:hidden;box-shadow:var(--sh)}
+.card-hd{display:flex;align-items:center;justify-content:space-between;padding:5px 10px;background:var(--bg2);border-bottom:1px solid var(--bd);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--tx2);min-height:28px}
+.card-hd .d{width:7px;height:7px;border-radius:50%;margin-right:5px}
+.card-hd-l{display:flex;align-items:center;gap:5px}
+.card-bd{padding:8px 10px}
+.card-bd0{padding:0}
+.up{color:var(--up)}.down{color:var(--dn)}.flat{color:var(--tx2)}
+.tag{display:inline-block;padding:1px 5px;border-radius:2px;font-size:8px;font-weight:600;font-family:var(--fs)}
+.tag-buy{background:var(--upB);color:var(--up)}
+.tag-sell{background:var(--dnB);color:var(--dn)}
+.tag-add{background:rgba(255,214,0,0.12);color:var(--ye)}
+.tag-reduce{background:rgba(0,229,255,0.12);color:var(--cy)}
+.page-title{display:flex;align-items:center;gap:12px;padding:4px 0}
+.page-title .date-badge{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--rL);padding:6px 14px;display:flex;flex-direction:column;align-items:center;gap:1px}
+.page-title .date-badge .day{font-family:var(--fm);font-size:28px;font-weight:700;color:var(--ac);line-height:1}
+.page-title .date-badge .mon{font-size:10px;color:var(--tx3);letter-spacing:1px}
+.page-title h1{font-size:16px;font-weight:700;color:var(--tx)}
+.page-title h1 span{color:var(--ac);font-weight:900}
+table{width:100%;border-collapse:collapse;font-size:10px}
+table th{text-align:left;padding:5px 8px;color:var(--tx3);font-weight:500;font-size:9px;text-transform:uppercase;border-bottom:1px solid var(--bd);white-space:nowrap;background:var(--bg3)}
+table td{padding:5px 8px;border-bottom:1px solid rgba(22,32,48,0.5);font-family:var(--fm);font-size:10px;white-space:nowrap}
+table tr:hover td{background:rgba(255,255,255,0.02)}
+table .td-name{font-family:var(--fs);color:var(--tx)}
+table .td-reason{max-width:200px;white-space:normal;font-family:var(--fs);font-size:9px;color:var(--tx2)}
+table input,table select{background:var(--bg3);border:1px solid var(--bd);color:var(--tx);padding:3px 6px;border-radius:var(--r);font-family:var(--fm);font-size:10px;width:100%;min-width:60px}
+table select{font-family:var(--fs);cursor:pointer}
+table input:focus,table select:focus{outline:none;border-color:var(--ac);box-shadow:0 0 6px var(--acG)}
+.add-row td{background:var(--bg3)}
+.form-inline{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.form-inline input,.form-inline select{background:var(--bg3);border:1px solid var(--bd);color:var(--tx);padding:4px 8px;border-radius:var(--r);font-family:var(--fm);font-size:10px}
+.form-inline input:focus,.form-inline select:focus{outline:none;border-color:var(--ac);box-shadow:0 0 6px var(--acG)}
+.form-inline select{font-family:var(--fs);cursor:pointer}
+.form-inline input[type="number"]{width:70px}
+.form-inline input[type="text"]{width:120px}
+.form-inline input[type="time"]{color-scheme:dark}
+.prediction-row{display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:4px;flex-wrap:wrap}
+.prediction-row .pr-name{font-family:var(--fs);font-weight:600;font-size:11px;color:var(--tx);min-width:80px}
+.prediction-row .pr-code{font-family:var(--fm);font-size:9px;color:var(--tx3);min-width:60px}
+.prediction-row select,.prediction-row input{background:var(--bg);border:1px solid var(--bd);color:var(--tx);padding:3px 6px;border-radius:var(--r);font-family:var(--fm);font-size:10px}
+.prediction-row select{font-family:var(--fs);cursor:pointer}
+.prediction-row input[type="number"]{width:70px}
+.prediction-row input[type="text"]{width:180px;font-family:var(--fs)}
+.prediction-row select:focus,.prediction-row input:focus{outline:none;border-color:var(--ac)}
+.prediction-row .pr-accuracy{font-family:var(--fm);font-size:9px;color:var(--tx2);min-width:80px;text-align:right}
+.drawdown-row{display:flex;align-items:center;gap:8px;padding:6px 8px;background:var(--bg3);border-radius:var(--r);margin-bottom:4px;flex-wrap:wrap}
+.drawdown-row .dd-name{font-family:var(--fs);font-weight:600;font-size:10px;color:var(--tx);min-width:70px}
+.drawdown-row .dd-code{font-family:var(--fm);font-size:9px;color:var(--tx3)}
+.drawdown-row .dd-bar-wrap{flex:1;min-width:120px;height:14px;background:var(--bg);border-radius:3px;overflow:hidden;position:relative}
+.drawdown-row .dd-bar{height:100%;border-radius:3px;transition:width 0.4s ease}
+.drawdown-row .dd-bar.low{background:var(--dn);opacity:0.7}
+.drawdown-row .dd-bar.mid{background:var(--ye);opacity:0.8}
+.drawdown-row .dd-bar.high{background:var(--up);opacity:0.8}
+.drawdown-row .dd-val{font-family:var(--fm);font-size:10px;font-weight:600;min-width:55px;text-align:right}
+.drawdown-row .dd-amount{font-family:var(--fm);font-size:9px;color:var(--tx2);min-width:70px;text-align:right}
+textarea.note-area{width:100%;min-height:180px;background:var(--bg3);border:1px solid var(--bd);color:var(--tx);padding:10px;border-radius:var(--r);font-family:var(--fs);font-size:11px;line-height:1.6;resize:vertical}
+textarea.note-area:focus{outline:none;border-color:var(--ac);box-shadow:0 0 8px var(--acG)}
+.summary-box{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);padding:10px;font-size:11px;line-height:1.6;color:var(--tx2)}
+.summary-box .s-line{padding:2px 0;padding-left:12px;position:relative}
+.summary-box .s-line::before{content:'▸';position:absolute;left:0;color:var(--ac);font-size:8px;top:3px}
+.empty-hint{text-align:center;padding:20px;color:var(--tx3);font-size:11px}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media(max-width:800px){.grid-2{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="terminal.html" class="nav-logo"><span class="dot"></span>AI TERMINAL<span style="font-weight:400;color:var(--tx3);font-size:10px">PRO</span></a>
+  <div class="nav-links">
+    <a href="terminal.html" class="nav-link">投研平台</a>
+    <a href="sector-flow.html" class="nav-link">板块资金</a>
+    <a href="stock-analysis.html" class="nav-link">个股分析</a>
+    <a href="news.html" class="nav-link">新闻中心</a>
+    <a href="动动脑.html" class="nav-link act">动动脑</a>
+    <a href="index.html" class="nav-link">首页</a>
+  </div>
+  <span style="flex:1"></span>
+  <div class="nav-status" id="nav-status"><span class="ind" id="status-ind"></span><span id="status-text">就绪</span></div>
+  <div class="nav-clock" id="clock">--</div>
+</nav>
+
+<div class="main">
+
+  <!-- 日期标题 -->
+  <div class="page-title">
+    <div class="date-badge">
+      <span class="day" id="date-day">17</span>
+      <span class="mon" id="date-mon">6月</span>
+    </div>
+    <h1><span id="date-full">2026年6月17日</span> · 动动脑</h1>
+  </div>
+
+  <!-- 今日操作记录 -->
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-hd-l"><span class="d" style="background:var(--ac);box-shadow:0 0 6px var(--acG)"></span>今日操作记录</div>
+      <span style="font-size:9px;color:var(--tx3)" id="trade-count">0 条记录</span>
+    </div>
+    <div class="card-bd0">
+      <table>
+        <thead>
+          <tr>
+            <th style="width:70px">时间</th>
+            <th style="width:70px">股票代码</th>
+            <th style="width:80px">股票名称</th>
+            <th style="width:70px">操作类型</th>
+            <th style="width:70px">价格</th>
+            <th style="width:60px">数量</th>
+            <th style="width:80px">金额</th>
+            <th>理由</th>
+            <th style="width:80px">操作</th>
+          </tr>
+        </thead>
+        <tbody id="trade-tbody">
+        </tbody>
+      </table>
+      <!-- 添加记录表单 -->
+      <div style="padding:8px 10px;background:var(--bg2);border-top:1px solid var(--bd)">
+        <div class="form-inline" id="trade-form">
+          <input type="time" id="tf-time" placeholder="时间" title="时间" style="width:80px">
+          <input type="text" id="tf-code" placeholder="股票代码" maxlength="6" style="width:80px">
+          <input type="text" id="tf-name" placeholder="股票名称" maxlength="10" style="width:80px">
+          <select id="tf-type">
+            <option value="买入">买入</option>
+            <option value="卖出">卖出</option>
+            <option value="加仓">加仓</option>
+            <option value="减仓">减仓</option>
+          </select>
+          <input type="number" id="tf-price" placeholder="价格" step="0.01" style="width:70px">
+          <input type="number" id="tf-qty" placeholder="数量" step="1" style="width:60px">
+          <input type="text" id="tf-reason" placeholder="操作理由" style="width:160px">
+          <button class="btn btn-ac btn-sm" onclick="addTrade()">＋ 添加</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 明日预测 + 回撤分析 -->
+  <div class="grid-2">
+    <!-- 明日预测 -->
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-hd-l"><span class="d" style="background:var(--bl);box-shadow:0 0 6px rgba(41,121,255,0.5)"></span>明日预测 <span style="font-weight:400;font-size:9px;text-transform:none">2026-06-18</span></div>
+        <span style="font-size:9px;color:var(--tx3)" id="pred-accuracy">准确率: --</span>
+      </div>
+      <div class="card-bd" id="prediction-panel"></div>
+    </div>
+
+    <!-- 回撤分析 -->
+    <div class="card">
+      <div class="card-hd">
+        <div class="card-hd-l"><span class="d" style="background:var(--ye);box-shadow:0 0 6px rgba(255,214,0,0.5)"></span>回撤分析</div>
+        <span style="font-size:9px;color:var(--tx3)">从历史高点</span>
+      </div>
+      <div class="card-bd" id="drawdown-panel"></div>
+    </div>
+  </div>
+
+  <!-- 每日复盘笔记 -->
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-hd-l"><span class="d" style="background:var(--pu);box-shadow:0 0 6px rgba(170,0,255,0.5)"></span>每日复盘笔记</div>
+      <button class="btn btn-sm" onclick="saveNote()">💾 保存</button>
+    </div>
+    <div class="card-bd">
+      <textarea class="note-area" id="daily-note" placeholder="在这里记录今天的复盘笔记……&#10;&#10;例如：&#10;- 今日大盘走势回顾&#10;- 个股操作心得&#10;- 需要改进的地方&#10;- 明日关注要点"></textarea>
+    </div>
+  </div>
+
+  <!-- 今日总结 -->
+  <div class="card">
+    <div class="card-hd">
+      <div class="card-hd-l"><span class="d" style="background:var(--cy);box-shadow:0 0 6px rgba(0,229,255,0.5)"></span>今日总结</div>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-sm" onclick="exportReview('xlsx')">导出Excel</button>
+        <button class="btn btn-sm" onclick="exportReview('docx')">导出Word</button>
+      </div>
+    </div>
+    <div class="card-bd">
+      <div class="summary-box" id="daily-summary"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ============================
+// 股票持仓数据
+// ============================
+const PORTFOLIO_STOCKS = (typeof STOCK_DATA !== 'undefined' && STOCK_DATA)
+  ? Object.entries(STOCK_DATA).map(function(e) {
+      var code = e[0], d = e[1];
+      return {
+        code: code.replace('.SZ', '').replace('.SH', ''),
+        name: d['简称'] || code,
+        currentPrice: Number(d['现价'] || 0),
+        highPrice: Number(d['最高'] || d['现价'] || 0)
+      };
+    })
+  : [
+      { code: '002475', name: '立讯精密', currentPrice: 67.32, highPrice: 67.66 },
+      { code: '002384', name: '东山精密', currentPrice: 256.92, highPrice: 266.03 },
+      { code: '600459', name: '贵研铂业', currentPrice: 26.52, highPrice: 27.36 },
+      { code: '000988', name: '华工科技', currentPrice: 170.51, highPrice: 172.80 },
+      { code: '600487', name: '亨通光电', currentPrice: 111.00, highPrice: 111.41 },
+      { code: '603211', name: '晋拓股份', currentPrice: 36.44, highPrice: 36.44 }
+    ];
+
+// ============================
+// localStorage keys
+// ============================
+const STORAGE_KEY = function(date) {
+  return 'ddn_' + date;
+};
+
+function getTodayKey() {
+  const now = new Date();
+  return now.getFullYear() + '-' + String(now.getMonth()+1).padStart(2,'0') + '-' + String(now.getDate()).padStart(2,'0');
+}
+
+function getTomorrowKey() {
+  const now = new Date();
+  const t = new Date(now);
+  t.setDate(t.getDate() + 1);
+  return t.getFullYear() + '-' + String(t.getMonth()+1).padStart(2,'0') + '-' + String(t.getDate()).padStart(2,'0');
+}
+
+var TODAY_KEY = getTodayKey();
+var TOMORROW_KEY = getTomorrowKey();
+
+// ============================
+// Data helpers
+// ============================
+function loadData(key, field) {
+  try {
+    var raw = localStorage.getItem(key);
+    if (!raw) return null;
+    var obj = JSON.parse(raw);
+    return field ? (obj[field] || null) : obj;
+  } catch(e) { return null; }
+}
+
+function saveData(key, field, value) {
+  try {
+    var obj = loadData(key) || {};
+    obj[field] = value;
+    localStorage.setItem(key, JSON.stringify(obj));
+  } catch(e) {}
+}
+
+function getTrades() {
+  return loadData(TODAY_KEY, 'trades') || [];
+}
+
+function setTrades(trades) {
+  saveData(TODAY_KEY, 'trades', trades);
+}
+
+function getPredictions() {
+  return loadData(TOMORROW_KEY, 'predictions') || {};
+}
+
+function setPredictions(predictions) {
+  saveData(TOMORROW_KEY, 'predictions', predictions);
+}
+
+function getNote() {
+  return loadData(TODAY_KEY, 'note') || '';
+}
+
+function setNote(note) {
+  saveData(TODAY_KEY, 'note', note);
+}
+
+// ============================
+// Clock
+// ============================
+function updateClock() {
+  var now = new Date();
+  document.getElementById('clock').textContent = now.toLocaleTimeString('zh-CN', {hour12:false});
+}
+updateClock();
+setInterval(updateClock, 1000);
+
+// ============================
+// Date display
+// ============================
+function renderDate() {
+  var now = new Date();
+  document.getElementById('date-day').textContent = String(now.getDate()).padStart(2,'0');
+  document.getElementById('date-mon').textContent = (now.getMonth()+1) + '月';
+  document.getElementById('date-full').textContent = now.getFullYear() + '年' + (now.getMonth()+1) + '月' + now.getDate() + '日';
+}
+renderDate();
+
+// ============================
+// 1. 今日操作记录
+// ============================
+function renderTrades() {
+  var trades = getTrades();
+  var tbody = document.getElementById('trade-tbody');
+  document.getElementById('trade-count').textContent = trades.length + ' 条记录';
+
+  if (trades.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="9" class="empty-hint">暂无操作记录，请在上方添加</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = trades.map(function(t, i) {
+    var typeTag = '';
+    switch(t.type) {
+      case '买入': typeTag = '<span class="tag tag-buy">买入</span>'; break;
+      case '卖出': typeTag = '<span class="tag tag-sell">卖出</span>'; break;
+      case '加仓': typeTag = '<span class="tag tag-add">加仓</span>'; break;
+      case '减仓': typeTag = '<span class="tag tag-reduce">减仓</span>'; break;
+      default: typeTag = t.type;
+    }
+    var amount = (parseFloat(t.price) * parseInt(t.qty)).toFixed(2);
+    return '<tr>' +
+      '<td>' + (t.time || '--') + '</td>' +
+      '<td>' + (t.code || '--') + '</td>' +
+      '<td class="td-name">' + (t.name || '--') + '</td>' +
+      '<td>' + typeTag + '</td>' +
+      '<td>' + (t.price || '--') + '</td>' +
+      '<td>' + (t.qty || '--') + '</td>' +
+      '<td>' + amount + '</td>' +
+      '<td class="td-reason">' + (t.reason || '--') + '</td>' +
+      '<td>' +
+        '<button class="btn btn-sm" onclick="editTrade(' + i + ')" title="编辑">✎</button> ' +
+        '<button class="btn btn-sm btn-danger" onclick="deleteTrade(' + i + ')" title="删除">✕</button>' +
+      '</td>' +
+      '</tr>';
+  }).join('');
+}
+
+function addTrade() {
+  var time = document.getElementById('tf-time').value.trim();
+  var code = document.getElementById('tf-code').value.trim();
+  var name = document.getElementById('tf-name').value.trim();
+  var type = document.getElementById('tf-type').value;
+  var price = document.getElementById('tf-price').value.trim();
+  var qty = document.getElementById('tf-qty').value.trim();
+  var reason = document.getElementById('tf-reason').value.trim();
+
+  if (!code || !name || !price || !qty) {
+    alert('请填写股票代码、名称、价格和数量');
+    return;
+  }
+
+  var trades = getTrades();
+  trades.push({
+    time: time,
+    code: code,
+    name: name,
+    type: type,
+    price: price,
+    qty: qty,
+    reason: reason
+  });
+  setTrades(trades);
+  renderTrades();
+  renderSummary();
+
+  // Clear form
+  document.getElementById('tf-time').value = '';
+  document.getElementById('tf-code').value = '';
+  document.getElementById('tf-name').value = '';
+  document.getElementById('tf-price').value = '';
+  document.getElementById('tf-qty').value = '';
+  document.getElementById('tf-reason').value = '';
+}
+
+function editTrade(index) {
+  var trades = getTrades();
+  var t = trades[index];
+  document.getElementById('tf-time').value = t.time || '';
+  document.getElementById('tf-code').value = t.code || '';
+  document.getElementById('tf-name').value = t.name || '';
+  document.getElementById('tf-type').value = t.type || '买入';
+  document.getElementById('tf-price').value = t.price || '';
+  document.getElementById('tf-qty').value = t.qty || '';
+  document.getElementById('tf-reason').value = t.reason || '';
+
+  // Remove the old entry and re-render
+  trades.splice(index, 1);
+  setTrades(trades);
+  renderTrades();
+  renderSummary();
+}
+
+function deleteTrade(index) {
+  if (!confirm('确定删除这条记录？')) return;
+  var trades = getTrades();
+  trades.splice(index, 1);
+  setTrades(trades);
+  renderTrades();
+  renderSummary();
+}
+
+// ============================
+// 2. 明日预测
+// ============================
+function renderPredictions() {
+  var predictions = getPredictions();
+  var panel = document.getElementById('prediction-panel');
+  var totalCorrect = 0;
+  var totalWithResult = 0;
+
+  var html = PORTFOLIO_STOCKS.map(function(stock) {
+    var pred = predictions[stock.code] || { direction: '平', change: '', reason: '', actual: '', actualChange: '' };
+    var dirClass = pred.direction === '涨' ? 'up' : (pred.direction === '跌' ? 'down' : 'flat');
+
+    // Check accuracy for this stock
+    var isCorrect = null;
+    if (pred.actual && pred.direction) {
+      if (pred.actual === '涨' && pred.direction === '涨') isCorrect = true;
+      else if (pred.actual === '跌' && pred.direction === '跌') isCorrect = true;
+      else if (pred.actual === '平' && pred.direction === '平') isCorrect = true;
+      else isCorrect = false;
+    }
+
+    if (isCorrect !== null) {
+      totalWithResult++;
+      if (isCorrect) totalCorrect++;
+    }
+
+    // Count historical accuracy across all dates
+    var histAccuracy = calcStockAccuracy(stock.code);
+
+    return '<div class="prediction-row">' +
+      '<span class="pr-name">' + stock.name + '</span>' +
+      '<span class="pr-code">' + stock.code + '</span>' +
+      '<select onchange="updatePrediction(\'' + stock.code + '\', \'direction\', this.value)">' +
+        '<option value="涨"' + (pred.direction === '涨' ? ' selected' : '') + '>📈 涨</option>' +
+        '<option value="跌"' + (pred.direction === '跌' ? ' selected' : '') + '>📉 跌</option>' +
+        '<option value="平"' + (pred.direction === '平' ? ' selected' : '') + '>➖ 平</option>' +
+      '</select>' +
+      '<input type="number" step="0.01" placeholder="预测涨跌幅%" value="' + pred.change + '" onchange="updatePrediction(\'' + stock.code + '\', \'change\', this.value)" style="width:80px">' +
+      '<input type="text" placeholder="预测理由" value="' + (pred.reason || '') + '" onchange="updatePrediction(\'' + stock.code + '\', \'reason\', this.value)" style="width:160px">' +
+      '<select onchange="updatePrediction(\'' + stock.code + '\', \'actual\', this.value)" style="font-size:9px">' +
+        '<option value="">实际结果</option>' +
+        '<option value="涨"' + (pred.actual === '涨' ? ' selected' : '') + '>涨</option>' +
+        '<option value="跌"' + (pred.actual === '跌' ? ' selected' : '') + '>跌</option>' +
+        '<option value="平"' + (pred.actual === '平' ? ' selected' : '') + '>平</option>' +
+      '</select>' +
+      '<input type="number" step="0.01" placeholder="实际涨跌幅%" value="' + (pred.actualChange || '') + '" onchange="updatePrediction(\'' + stock.code + '\', \'actualChange\', this.value)" style="width:80px">' +
+      '<span class="pr-accuracy" style="color:' + (isCorrect === true ? 'var(--dn)' : (isCorrect === false ? 'var(--up)' : 'var(--tx3)')) + '">' +
+        (isCorrect === true ? '✓ 正确' : (isCorrect === false ? '✗ 错误' : '待验证')) +
+        ' | 历史准确率: ' + histAccuracy +
+      '</span>' +
+      '</div>';
+  }).join('');
+
+  // Overall accuracy
+  var overallAcc = totalWithResult > 0 ? ((totalCorrect / totalWithResult) * 100).toFixed(0) + '%' : '--';
+  document.getElementById('pred-accuracy').textContent = '准确率: ' + overallAcc;
+
+  panel.innerHTML = html || '<div class="empty-hint">加载预测数据...</div>';
+}
+
+function updatePrediction(code, field, value) {
+  var predictions = getPredictions();
+  if (!predictions[code]) {
+    predictions[code] = { direction: '平', change: '', reason: '', actual: '', actualChange: '' };
+  }
+  predictions[code][field] = value;
+  setPredictions(predictions);
+  renderPredictions();
+  renderSummary();
+}
+
+function calcStockAccuracy(code) {
+  // Search all localStorage keys for prediction history
+  var total = 0, correct = 0;
+  for (var i = 0; i < localStorage.length; i++) {
+    var key = localStorage.key(i);
+    if (!key || key.indexOf('ddn_') !== 0) continue;
+    try {
+      var obj = JSON.parse(localStorage.getItem(key));
+      if (!obj || !obj.predictions) continue;
+      var pred = obj.predictions[code];
+      if (!pred || !pred.actual || !pred.direction) continue;
+      total++;
+      if ((pred.actual === '涨' && pred.direction === '涨') ||
+          (pred.actual === '跌' && pred.direction === '跌') ||
+          (pred.actual === '平' && pred.direction === '平')) {
+        correct++;
+      }
+    } catch(e) {}
+  }
+  return total > 0 ? (correct / total * 100).toFixed(0) + '%' : '--';
+}
+
+// ============================
+// 3. 回撤分析
+// ============================
+function renderDrawdown() {
+  var panel = document.getElementById('drawdown-panel');
+
+  var html = PORTFOLIO_STOCKS.map(function(stock) {
+    var dd = stock.highPrice - stock.currentPrice;
+    var ddPct = (dd / stock.highPrice * 100);
+    var ddPctStr = ddPct.toFixed(2);
+    var ddAmt = dd.toFixed(2);
+
+    var barClass = ddPct <= 2 ? 'low' : (ddPct <= 5 ? 'mid' : 'high');
+    var barColor = ddPct <= 2 ? 'var(--dn)' : (ddPct <= 5 ? 'var(--ye)' : 'var(--up)');
+    var barWidth = Math.min(ddPct * 10, 100); // scale for visual
+
+    return '<div class="drawdown-row">' +
+      '<span class="dd-name">' + stock.name + '</span>' +
+      '<span class="dd-code">' + stock.code + '</span>' +
+      '<span style="font-family:var(--fm);font-size:9px;color:var(--tx3);min-width:55px">最高 ' + stock.highPrice.toFixed(2) + '</span>' +
+      '<span style="font-family:var(--fm);font-size:9px;color:var(--tx);min-width:55px">当前 ' + stock.currentPrice.toFixed(2) + '</span>' +
+      '<div class="dd-bar-wrap">' +
+        '<div class="dd-bar ' + barClass + '" style="width:' + barWidth + '%"></div>' +
+      '</div>' +
+      '<span class="dd-val" style="color:' + barColor + '">-' + ddPctStr + '%</span>' +
+      '<span class="dd-amount">-' + ddAmt + '</span>' +
+      '</div>';
+  }).join('');
+
+  panel.innerHTML = html;
+}
+
+// ============================
+// 4. 每日复盘笔记
+// ============================
+function renderNote() {
+  var note = getNote();
+  document.getElementById('daily-note').value = note;
+}
+
+function saveNote() {
+  var note = document.getElementById('daily-note').value;
+  setNote(note);
+  renderSummary();
+
+  // Show brief feedback
+  var statusText = document.getElementById('status-text');
+  statusText.textContent = '已保存';
+  setTimeout(function() { statusText.textContent = '就绪'; }, 1500);
+}
+
+async function exportReview(format) {
+  var payload = {
+    format: format,
+    date: TODAY_KEY,
+    trades: getTrades(),
+    predictions: getPredictions(),
+    note: getNote(),
+    summary: document.getElementById('daily-summary').innerText,
+  };
+  try {
+    var resp = await fetch('/api/export/review', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    var blob = await resp.blob();
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = '动动脑每日总结_' + TODAY_KEY + '.' + format;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+    var statusText = document.getElementById('status-text');
+    statusText.textContent = '导出完成';
+    setTimeout(function() { statusText.textContent = '就绪'; }, 1500);
+  } catch (e) {
+    alert('导出失败：' + e.message);
+  }
+}
+
+// Auto-save on input (debounced)
+var noteTimer = null;
+document.addEventListener('DOMContentLoaded', function() {
+  document.getElementById('daily-note').addEventListener('input', function() {
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(function() {
+      setNote(document.getElementById('daily-note').value);
+      renderSummary();
+    }, 1000);
+  });
+});
+
+// ============================
+// 5. 今日总结
+// ============================
+function renderSummary() {
+  var trades = getTrades();
+  var predictions = getPredictions();
+  var note = getNote();
+  var lines = [];
+
+  // Operation summary
+  if (trades.length === 0) {
+    lines.push('今日暂无操作记录。');
+  } else {
+    var buyCount = trades.filter(function(t) { return t.type === '买入' || t.type === '加仓'; }).length;
+    var sellCount = trades.filter(function(t) { return t.type === '卖出' || t.type === '减仓'; }).length;
+    var totalAmount = trades.reduce(function(sum, t) {
+      return sum + (parseFloat(t.price) || 0) * (parseInt(t.qty) || 0);
+    }, 0);
+
+    lines.push('今日共操作 ' + trades.length + ' 笔，其中买入/加仓 ' + buyCount + ' 笔，卖出/减仓 ' + sellCount + ' 笔。');
+    lines.push('今日交易总金额：¥' + totalAmount.toFixed(2));
+
+    var stockOps = {};
+    trades.forEach(function(t) {
+      var key = (t.name || t.code);
+      if (!stockOps[key]) stockOps[key] = [];
+      stockOps[key].push(t.type);
+    });
+    var stockNames = Object.keys(stockOps);
+    if (stockNames.length > 0) {
+      lines.push('涉及股票：' + stockNames.join('、'));
+    }
+  }
+
+  // Prediction summary
+  var predStocks = [];
+  PORTFOLIO_STOCKS.forEach(function(stock) {
+    var pred = predictions[stock.code];
+    if (pred && pred.direction) {
+      predStocks.push(stock.name + '(' + pred.direction + (pred.change ? ' ' + pred.change + '%' : '') + ')');
+    }
+  });
+  if (predStocks.length > 0) {
+    lines.push('明日预测：' + predStocks.join('、'));
+  } else {
+    lines.push('明日预测：尚未填写');
+  }
+
+  // Drawdown summary
+  var maxDD = PORTFOLIO_STOCKS.reduce(function(max, s) {
+    var dd = (s.highPrice - s.currentPrice) / s.highPrice * 100;
+    return dd > max.pct ? { name: s.name, pct: dd } : max;
+  }, { name: '', pct: 0 });
+  if (maxDD.pct > 0) {
+    lines.push('最大回撤个股：' + maxDD.name + '（-' + maxDD.pct.toFixed(2) + '%）');
+  }
+  var pending = PORTFOLIO_STOCKS.filter(function(s) { return !(s.currentPrice > 0); }).map(function(s) { return s.name; });
+  if (pending.length > 0) {
+    lines.push('待刷新行情：' + pending.join('、'));
+  }
+
+  // Note summary
+  if (note.trim()) {
+    lines.push('已记录复盘笔记（' + note.length + '字）');
+  } else {
+    lines.push('今日复盘笔记尚未填写。');
+  }
+  lines.push('支持导出当日记录为 Word / Excel。');
+
+  var html = lines.map(function(line) {
+    return '<div class="s-line">' + line + '</div>';
+  }).join('');
+
+  document.getElementById('daily-summary').innerHTML = html || '<div class="empty-hint">暂无数据</div>';
+}
+
+// ============================
+// Initialize
+// ============================
+function init() {
+  renderTrades();
+  renderPredictions();
+  renderDrawdown();
+  renderNote();
+  renderSummary();
+}
+
+init();
+</script>
+
+</body>
+</html>

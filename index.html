@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>投研平台 · 集合首页</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root{--bg:#060b10;--bg2:#0c1520;--bg3:#101a28;--bd:#162030;--bdA:#264060;--tx:#d0dae6;--tx2:#7088a0;--tx3:#405060;--ac:#ff6a00;--acG:rgba(255,106,0,0.3);--up:#ff1744;--dn:#00c853;--fs:'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif;--fm:'JetBrains Mono','Consolas',monospace}
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{background:var(--bg);color:var(--tx);font-family:var(--fs);font-size:13px;line-height:1.5;min-height:100vh;display:flex;flex-direction:column;align-items:center}
+    body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background-image:linear-gradient(rgba(255,255,255,0.01) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.01) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:0}
+    .header{width:100%;max-width:1100px;padding:40px 20px 10px;text-align:center;position:relative;z-index:1}
+    .header .logo{font-family:var(--fm);font-size:2rem;font-weight:700;color:var(--ac);letter-spacing:2px;display:flex;align-items:center;justify-content:center;gap:10px}
+    .header .logo .dot{width:10px;height:10px;background:var(--ac);border-radius:50%;box-shadow:0 0 12px var(--acG);animation:pulse 2s infinite}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
+    .header .sub{font-size:0.82rem;color:var(--tx3);margin-top:6px}
+    .header .date{font-size:0.72rem;color:var(--tx3);margin-top:3px;font-family:var(--fm)}
+    .container{width:100%;max-width:1100px;padding:20px;flex:1;position:relative;z-index:1}
+    .section-title{font-size:0.78rem;color:var(--tx3);text-transform:uppercase;letter-spacing:3px;margin:20px 0 12px;padding:0 4px;font-family:var(--fm)}
+    .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px}
+    .card{display:block;text-decoration:none;background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:18px;transition:all 0.2s;cursor:pointer;position:relative;overflow:hidden}
+    .card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,0.4);border-color:var(--ac)}
+    .card:hover .card-arrow{opacity:1;transform:translateX(0)}
+    .card-icon{width:40px;height:40px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:1rem;margin-bottom:10px;color:#fff}
+    .card-title{font-weight:600;font-size:0.9rem;color:var(--tx);margin-bottom:3px}
+    .card-desc{font-size:0.7rem;color:var(--tx3);line-height:1.4}
+    .card-arrow{position:absolute;right:14px;top:50%;transform:translateY(-50%) translateX(-8px);color:var(--ac);font-size:0.7rem;opacity:0;transition:all 0.2s}
+    .card-badge{display:inline-block;font-size:0.6rem;padding:2px 7px;border-radius:8px;margin-top:6px;font-weight:600;font-family:var(--fm)}
+    .status-bar{display:flex;align-items:center;gap:8px;padding:10px 16px;background:var(--bg2);border:1px solid var(--bd);border-radius:8px;margin-bottom:16px;font-size:0.75rem}
+    .status-dot{width:7px;height:7px;border-radius:50%;background:#3fb950;animation:pulse 2s infinite}
+    .footer{width:100%;max-width:1100px;padding:14px 20px;text-align:center;color:var(--tx3);font-size:0.65rem;border-top:1px solid var(--bd);margin-top:20px;position:relative;z-index:1}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo"><div class="dot"></div>AI TERMINAL PRO</div>
+    <div class="sub">智能投资研究系统 · 集合平台</div>
+    <div class="date" id="today-date"></div>
+  </div>
+  <div class="container">
+    <div class="status-bar">
+      <div class="status-dot"></div>
+      <span>系统就绪 · 所有模块已连接</span>
+      <span style="margin-left:auto;font-family:var(--fm)" id="clock"></span>
+    </div>
+
+    <div class="section-title">交易分析</div>
+    <div class="grid" id="trading-grid"></div>
+  </div>
+  <div class="footer">AI TERMINAL PRO &copy; 2026 · 仅供学习研究 · 投资有风险，入市需谨慎</div>
+
+  <script>
+    const now=new Date();const w=['日','一','二','三','四','五','六'];
+    document.getElementById('today-date').textContent=
+      now.getFullYear()+'年'+(now.getMonth()+1)+'月'+now.getDate()+'日 · 星期'+w[now.getDay()];
+
+    function updateClock(){
+      const d=new Date();
+      document.getElementById('clock').textContent=d.toLocaleTimeString('zh-CN',{hour12:false});
+    }
+    updateClock();setInterval(updateClock,1000);
+
+    const pages=[
+      {title:'投研平台',icon:'fa-desktop',desc:'核心看盘 · 持仓管理 · 技术分析 · 加减仓建议',href:'terminal.html',color:'#2563eb'},
+      {title:'板块资金',icon:'fa-water',desc:'板块资金流向 · 动态折线图 · 净流入/净流入率排名',href:'sector-flow.html',color:'#0ea5e9'},
+      {title:'个股分析',icon:'fa-microscope',desc:'个股深度研究 · 财报分析 · 产业逻辑 · 预测',href:'stock-analysis.html',color:'#8b5cf6'},
+      {title:'新闻中心',icon:'fa-newspaper',desc:'财经新闻 · 同花顺实时推送 · 4大分类',href:'news.html',color:'#ef4444'},
+      {title:'动动脑',icon:'fa-brain',desc:'操作记录 · 每日复盘 · 回撤分析 · 预测记录',href:'动动脑.html',color:'#f59e0b'},
+    ];
+
+    document.getElementById('trading-grid').innerHTML=pages.map(p=>`
+      <a href="${p.href}" class="card">
+        <div class="card-icon" style="background:${p.color}"><i class="fas ${p.icon}"></i></div>
+        <div class="card-title">${p.title}</div>
+        <div class="card-desc">${p.desc}</div>
+        <div class="card-arrow"><i class="fas fa-arrow-right"></i></div>
+      </a>
+    `).join('');
+  </script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+{
+  "source": "Mootdx/TDX > 腾讯财经 > AKShare > 新浪财经",
+  "updatedAt": "2026-06-23 17:32:51",
+  "freshness": "realtime",
+  "stale": false,
+  "unavailable": false,
+  "errors": [],
+  "data": {
+    "quotes": {
+      "sh000001": {
+        "symbol": "sh000001",
+        "name": "上证指数",
+        "open": 4153.59,
+        "prevClose": 4163.1,
+        "current": 4106.25,
+        "high": 4175.35,
+        "low": 4085.59,
+        "volume": 709003913.0,
+        "amount": 0.0,
+        "changePct": -1.37,
+        "change": -1.37,
+        "source": "Tencent",
+        "updatedAt": "2026-06-23 17:31:41",
+        "freshness": "realtime",
+        "stale": false,
+        "unavailable": false,
+        "errors": []
+      },
+      "sh600487": {
+        "symbol": "sh600487",
+        "name": "亨通光电",
+        "open": 121.2,
+        "prevClose": 120.13,
+        "current": 117.31,
+        "high": 125.16,
+        "low": 115.64,
+        "volume": 1834233.0,
+        "amount": 857338.0,
+        "changePct": -2.35,
+        "change": -2.35,
+        "source": "Tencent",
+        "updatedAt": "2026-06-23 17:32:51",
+        "freshness": "realtime",
+        "stale": false,
+        "unavailable": false,
+        "errors": []
+      }
+    }
+  },
+  "items": {
+    "quotes": {
+      "sh000001": {
+        "symbol": "sh000001",
+        "name": "上证指数",
+        "open": 4153.59,
+        "prevClose": 4163.1,
+        "current": 4106.25,
+        "high": 4175.35,
+        "low": 4085.59,
+        "volume": 709003913.0,
+        "amount": 0.0,
+        "changePct": -1.37,
+        "change": -1.37,
+        "source": "Tencent",
+        "updatedAt": "2026-06-23 17:31:41",
+        "freshness": "realtime",
+        "stale": false,
+        "unavailable": false,
+        "errors": []
+      },
+      "sh600487": {
+        "symbol": "sh600487",
+        "name": "亨通光电",
+        "open": 121.2,
+        "prevClose": 120.13,
+        "current": 117.31,
+        "high": 125.16,
+        "low": 115.64,
+        "volume": 1834233.0,
+        "amount": 857338.0,
+        "changePct": -2.35,
+        "change": -2.35,
+        "source": "Tencent",
+        "updatedAt": "2026-06-23 17:32:51",
+        "freshness": "realtime",
+        "stale": false,
+        "unavailable": false,
+        "errors": []
+      }
+    }
+  }
+}
