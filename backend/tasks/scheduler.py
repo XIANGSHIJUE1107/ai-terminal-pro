@@ -12,9 +12,14 @@ _scheduler: BackgroundScheduler | None = None
 
 
 def run_refresh_job():
-    result = datahub_service.refresh(force=True)
-    status = result.get("freshness")
-    print(f"[Scheduler] refresh completed: {status} @ {result.get('updatedAt')}")
+    try:
+        result = datahub_service.refresh(force=True)
+        status = result.get("freshness")
+        print(f"[Scheduler] refresh completed: {status} @ {result.get('updatedAt')}")
+    except Exception as exc:
+        print(f"[Scheduler] refresh failed: {exc}")
+        import traceback
+        traceback.print_exc()
 
 
 def start_scheduler():

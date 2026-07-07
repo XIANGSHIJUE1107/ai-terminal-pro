@@ -7,126 +7,128 @@
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <style>
-:root{--bg:#060b10;--bg2:#0c1520;--bg3:#101a28;--bgC:#0e1622;--bd:#162030;--bdA:#264060;--tx:#d0dae6;--tx2:#7088a0;--tx3:#405060;--ac:#ff6a00;--acG:rgba(255,106,0,0.3);--up:#ff1744;--upB:rgba(255,23,68,0.15);--dn:#00c853;--dnB:rgba(0,200,83,0.15);--bl:#2979ff;--ye:#ffd600;--pu:#aa00ff;--cy:#00e5ff;--fm:'JetBrains Mono','Consolas',monospace;--fs:'Noto Sans SC','Microsoft YaHei',sans-serif;--r:4px;--rL:6px;--sh:0 2px 12px rgba(0,0,0,0.5);--tr:0.15s ease}
+:root{--bg:#05070a;--bg2:#0b0f17;--bg3:#111725;--bgC:#0d121c;--bd:#1a2333;--bdA:#2a3b55;--bdH:#3a5275;--tx:#f0f4f8;--tx2:#b8c6d8;--tx3:#8a9eb6;--ac:#00d4ff;--acG:rgba(0,212,255,0.35);--up:#ff3b5c;--upB:rgba(255,59,92,0.18);--dn:#ff9500;--dnB:rgba(255,149,0,0.18);--bl:#2d8cff;--ye:#ffcc00;--pu:#a855f7;--cy:#00d4ff;--fm:'JetBrains Mono','Consolas',monospace;--fs:'Noto Sans SC','Microsoft YaHei',sans-serif;--r:6px;--rL:10px;--sh:0 8px 32px rgba(0,0,0,.45);--tr:0.18s ease}
 *{margin:0;padding:0;box-sizing:border-box}
-body{background:var(--bg);color:var(--tx);font-family:var(--fs);font-size:12px;line-height:1.4;overflow-x:hidden;overflow-y:auto;min-height:100vh}
-body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background-image:linear-gradient(rgba(255,255,255,0.01) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.01) 1px,transparent 1px);background-size:32px 32px;pointer-events:none;z-index:0}
-::-webkit-scrollbar{width:4px;height:4px}
-::-webkit-scrollbar-track{background:var(--bg)}
-::-webkit-scrollbar-thumb{background:var(--bd);border-radius:2px}
-::-webkit-scrollbar-thumb:hover{background:var(--bdA)}
-.nav{position:sticky;top:0;z-index:100;height:42px;background:var(--bg2);border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 12px;gap:14px;backdrop-filter:blur(20px)}
-.nav-logo{font-family:var(--fm);font-size:13px;font-weight:700;color:var(--ac);letter-spacing:1px;display:flex;align-items:center;gap:6px;white-space:nowrap;text-decoration:none}
-.nav-logo .dot{width:7px;height:7px;background:var(--ac);border-radius:50%;box-shadow:0 0 8px var(--acG);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.3}}
-.nav-links{display:flex;gap:2px;margin-left:20px}
-.nav-link{padding:5px 12px;font-size:10px;color:var(--tx3);text-decoration:none;border-radius:var(--r);transition:all var(--tr);font-family:var(--fs);white-space:nowrap}
-.nav-link:hover{color:var(--tx);background:var(--bg3)}
-.nav-link.act{color:var(--ac);background:rgba(255,106,0,0.1)}
-.nav-clock{font-family:var(--fm);font-size:11px;color:var(--tx2);margin-left:auto}
-.btn{background:var(--bg3);border:1px solid var(--bd);color:var(--tx);padding:4px 10px;border-radius:var(--r);font-family:var(--fm);font-size:10px;cursor:pointer;transition:all var(--tr);display:flex;align-items:center;gap:4px;white-space:nowrap}
-.btn:hover{background:var(--bdA);border-color:var(--ac);box-shadow:0 0 10px var(--acG)}
-.btn-ac{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:600}
+body{background:var(--bg);color:var(--tx);font-family:var(--fs);font-size:14px;line-height:1.45;overflow-x:hidden;overflow-y:auto;min-height:100vh}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(255,255,255,0.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.018) 1px,transparent 1px);background-size:24px 24px;pointer-events:none;z-index:0}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--bdA);border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:var(--bdH)}
+.nav{position:relative;z-index:100;height:44px;background:linear-gradient(180deg,var(--bg2),var(--bg));border-bottom:1px solid var(--bd);display:flex;align-items:center;padding:0 14px;gap:16px;box-shadow:0 4px 24px rgba(0,0,0,.55)}
+.nav-logo{font-family:var(--fm);font-size:16px;font-weight:800;color:var(--tx);letter-spacing:1.5px;display:flex;align-items:center;gap:8px;white-space:nowrap;text-decoration:none;text-shadow:0 0 18px rgba(0,212,255,.25)}
+.nav-logo .dot{width:8px;height:8px;background:var(--ac);border-radius:50%;box-shadow:0 0 12px var(--acG)}
+.nav-logo .brand-ac{color:var(--ac)}
+.nav-links{display:flex;gap:6px;margin-left:22px}
+.nav-link{padding:5px 12px;font-size:12px;font-weight:600;color:var(--tx2);text-decoration:none;border-radius:var(--r);transition:all var(--tr);border:1px solid transparent}
+.nav-link:hover,.nav-link.act{color:var(--tx);background:rgba(0,212,255,.08);border-color:rgba(0,212,255,.25)}
+.nav-link.act{color:var(--ac);background:rgba(0,212,255,.12);border-color:rgba(0,212,255,.35)}
+.nav-clock{font-family:var(--fm);font-size:13px;color:var(--tx2);margin-left:auto;letter-spacing:.3px}
+.btn{background:rgba(17,23,37,.9);border:1px solid var(--bdA);color:var(--tx);padding:6px 14px;border-radius:var(--r);font-family:var(--fm);font-size:12px;font-weight:600;cursor:pointer;transition:all var(--tr);display:inline-flex;align-items:center;gap:6px;white-space:nowrap;letter-spacing:.3px}
+.btn:hover{background:rgba(0,212,255,.12);border-color:var(--ac);box-shadow:0 0 14px var(--acG);color:#fff}
+.btn-ac{background:linear-gradient(135deg,rgba(0,212,255,.18),rgba(45,140,255,.18));border-color:var(--ac);color:var(--ac);box-shadow:0 0 14px rgba(0,212,255,.15)}
+.btn-ac:hover{background:linear-gradient(135deg,rgba(0,212,255,.28),rgba(45,140,255,.28));box-shadow:0 0 18px rgba(0,212,255,.3)}
 .main{position:relative;z-index:1;padding:8px;display:flex;flex-direction:column;gap:8px}
-.card{background:var(--bgC);border:1px solid var(--bd);border-radius:var(--rL);overflow:hidden;box-shadow:var(--sh)}
-.card-hd{display:flex;align-items:center;justify-content:space-between;padding:6px 12px;background:var(--bg2);border-bottom:1px solid var(--bd);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;color:var(--tx2)}
+.card{background:linear-gradient(180deg,rgba(13,18,28,.95),rgba(11,15,23,.98));border:1px solid var(--bd);border-radius:var(--rL);overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,.45),inset 0 1px 0 rgba(255,255,255,.03);position:relative}
+.card::before{content:'';position:absolute;top:0;left:12px;right:12px;height:1px;background:linear-gradient(90deg,transparent,rgba(0,212,255,.35),transparent);pointer-events:none}
+.card-hd{display:flex;align-items:center;justify-content:space-between;padding:8px 14px;background:rgba(17,23,37,.6);border-bottom:1px solid var(--bd);font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--tx2);min-height:38px}
 .card-hd-l{display:flex;align-items:center;gap:6px}
-.card-hd .d{width:7px;height:7px;border-radius:50%;background:var(--ac);box-shadow:0 0 6px var(--acG);margin-right:5px}
-.card-bd{padding:8px 12px}
+.card-hd .d{width:7px;height:7px;border-radius:50%;background:var(--ac);box-shadow:0 0 8px var(--acG);margin-right:6px}
+.card-bd{padding:8px 10px}
 .card-bd0{padding:0}
 .up{color:var(--up)}.down{color:var(--dn)}.flat{color:var(--tx2)}
 .tabs{display:flex;gap:0;border-bottom:1px solid var(--bd);flex-wrap:wrap}
-.tab{padding:6px 14px;font-size:11px;font-weight:500;color:var(--tx3);cursor:pointer;border-bottom:2px solid transparent;transition:all var(--tr);background:none;border-top:none;border-left:none;border-right:none;font-family:var(--fs);white-space:nowrap;display:inline-flex;align-items:center;gap:2px}
+.tab{padding:7px 14px;font-size:12px;font-weight:600;color:var(--tx3);cursor:pointer;border-bottom:2px solid transparent;transition:all var(--tr);background:none;border-top:none;border-left:none;border-right:none;font-family:var(--fs);white-space:nowrap;display:inline-flex;align-items:center;gap:2px}
 .tab:hover{color:var(--tx)}
 .tab.act{color:var(--ac);border-bottom-color:var(--ac)}
 .price-big{font-family:var(--fm);font-size:28px;font-weight:700}
 .price-change{font-family:var(--fm);font-size:14px;margin-left:8px}
 .info-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
 .info-item{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);padding:6px 10px}
-.info-item .il{font-size:9px;color:var(--tx3);margin-bottom:2px}
-.info-item .iv{font-family:var(--fm);font-size:12px;font-weight:600}
+.info-item .il{font-size:11px;color:var(--tx3);margin-bottom:3px}
+.info-item .iv{font-family:var(--fm);font-size:13px;font-weight:600}
 .analysis-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .analysis-card{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--rL);padding:12px}
-.analysis-card h4{font-size:11px;color:var(--ac);margin-bottom:8px;font-weight:600;display:flex;align-items:center;gap:6px}
+.analysis-card h4{font-size:12px;color:var(--ac);margin-bottom:10px;font-weight:600;display:flex;align-items:center;gap:6px}
 .analysis-card h4::before{content:'';width:6px;height:6px;background:var(--ac);border-radius:50%;box-shadow:0 0 6px var(--acG)}
-.analysis-card p,.analysis-card li{font-size:10px;color:var(--tx2);line-height:1.6}
+.analysis-card p,.analysis-card li{font-size:12px;color:var(--tx2);line-height:1.6}
 .analysis-card ul{padding-left:14px}
 .analysis-card ul li{margin-bottom:3px}
 .fin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .fin-card{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);padding:8px 10px;text-align:center}
-.fin-card .fl{font-size:9px;color:var(--tx3);margin-bottom:4px}
-.fin-card .fv{font-family:var(--fm);font-size:14px;font-weight:700}
-.fin-card .fs{font-size:8px;color:var(--tx3);margin-top:2px}
+.fin-card .fl{font-size:11px;color:var(--tx3);margin-bottom:5px}
+.fin-card .fv{font-family:var(--fm);font-size:15px;font-weight:700}
+.fin-card .fs{font-size:11px;color:var(--tx3);margin-top:3px}
 .chart-area{height:300px}
-.tag{display:inline-block;padding:1px 6px;border-radius:2px;font-size:8px;font-weight:600;font-family:var(--fs)}
+.tag{display:inline-block;padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600;font-family:var(--fs)}
 .tag-up{background:var(--upB);color:var(--up)}.tag-dn{background:var(--dnB);color:var(--dn)}
 .tag-bl{background:rgba(41,121,255,0.12);color:var(--bl)}
 .tag-cy{background:rgba(0,229,255,0.12);color:var(--cy)}
 .tag-pu{background:rgba(170,0,255,0.12);color:var(--pu)}
 .fund-flow-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
 .fund-card{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);padding:10px;text-align:center}
-.fund-card .fc-l{font-size:9px;color:var(--tx3);margin-bottom:4px}
-.fund-card .fc-v{font-family:var(--fm);font-size:13px;font-weight:700}
-.fund-card .fc-s{font-size:8px;color:var(--tx3);margin-top:2px}
+.fund-card .fc-l{font-size:11px;color:var(--tx3);margin-bottom:5px}
+.fund-card .fc-v{font-family:var(--fm);font-size:14px;font-weight:700}
+.fund-card .fc-s{font-size:11px;color:var(--tx3);margin-top:3px}
 .fund-bar{height:4px;background:var(--bg);border-radius:2px;overflow:hidden;margin-top:6px;display:flex}
 .fund-bar .bar-in{height:100%;background:var(--up);border-radius:2px}
 .fund-bar .bar-out{height:100%;background:var(--dn);border-radius:2px}
 .score-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
 .score-card{background:var(--bg);border-radius:var(--r);padding:6px 8px;text-align:center}
-.score-card .sc{font-family:var(--fm);font-size:16px;font-weight:700}
-.score-card .sl{font-size:8px;color:var(--tx3);margin-top:2px}
+.score-card .sc{font-family:var(--fm);font-size:17px;font-weight:700}
+.score-card .sl{font-size:11px;color:var(--tx3);margin-top:3px}
 .flow-pie{height:250px}
 .tech-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
 .tech-item{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px}
-.tech-item .ti-hd{font-size:10px;font-weight:700;color:var(--ac);margin-bottom:6px;display:flex;align-items:center;gap:4px}
+.tech-item .ti-hd{font-size:12px;font-weight:700;color:var(--ac);margin-bottom:8px;display:flex;align-items:center;gap:4px}
 .tech-item .ti-hd::before{content:'';width:5px;height:5px;background:var(--ac);border-radius:50%}
-.tech-item .ti-row{display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px}
+.tech-item .ti-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:3px}
 .tech-item .ti-row .tl{color:var(--tx3)}.tech-item .ti-row .tv{font-family:var(--fm);color:var(--tx)}
-.tech-item .ti-note{font-size:8px;color:var(--tx3);margin-top:4px;line-height:1.5}
+.tech-item .ti-note{font-size:11px;color:var(--tx3);margin-top:5px;line-height:1.5}
 .drawdown-bar-wrap{height:8px;background:var(--bg);border-radius:4px;overflow:hidden;margin:8px 0}
 .drawdown-bar-fill{height:100%;background:linear-gradient(90deg,var(--dn),var(--ye),var(--up));border-radius:4px;transition:width .5s ease}
 .drawdown-info{display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:4px}
 .drawdown-info .di{text-align:center}
-.drawdown-info .di .dil{font-size:9px;color:var(--tx3);margin-bottom:2px}
-.drawdown-info .di .div{font-family:var(--fm);font-size:12px;font-weight:600}
-.ops-table{width:100%;border-collapse:collapse;font-size:10px;margin-bottom:8px}
-.ops-table th{background:var(--bg2);color:var(--tx3);padding:5px 8px;text-align:left;font-size:9px;border-bottom:1px solid var(--bd)}
-.ops-table td{padding:5px 8px;border-bottom:1px solid var(--bd);color:var(--tx2)}
+.drawdown-info .di .dil{font-size:11px;color:var(--tx3);margin-bottom:3px}
+.drawdown-info .di .div{font-family:var(--fm);font-size:13px;font-weight:600}
+.ops-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:8px}
+.ops-table th{background:var(--bg2);color:var(--tx3);padding:6px 10px;text-align:left;font-size:11px;border-bottom:1px solid var(--bd)}
+.ops-table td{padding:6px 10px;border-bottom:1px solid var(--bd);color:var(--tx2)}
 .ops-table tr:hover td{background:rgba(255,255,255,0.02)}
-.ops-empty{text-align:center;color:var(--tx3);padding:16px;font-size:10px}
+.ops-empty{text-align:center;color:var(--tx3);padding:16px;font-size:12px}
 .ops-form{display:none;background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);padding:10px;margin-bottom:8px}
 .ops-form.show{display:block}
 .ops-form .form-row{display:flex;gap:6px;align-items:flex-end;flex-wrap:wrap;margin-bottom:6px}
-.ops-form label{font-size:9px;color:var(--tx3);display:block;margin-bottom:2px}
-.ops-form input,.ops-form select,.ops-form textarea{background:var(--bg);border:1px solid var(--bd);color:var(--tx);padding:4px 8px;border-radius:var(--r);font-family:var(--fm);font-size:10px;outline:none;width:100%}
+.ops-form label{font-size:11px;color:var(--tx3);display:block;margin-bottom:3px}
+.ops-form input,.ops-form select,.ops-form textarea{background:var(--bg);border:1px solid var(--bd);color:var(--tx);padding:5px 10px;border-radius:var(--r);font-family:var(--fm);font-size:12px;outline:none;width:100%}
 .ops-form input:focus,.ops-form select:focus,.ops-form textarea:focus{border-color:var(--ac)}
 .ops-form .form-field{flex:1;min-width:80px}
 .ops-form textarea{resize:vertical;min-height:40px;font-family:var(--fs)}
 .pred-btns{display:flex;gap:4px;margin-bottom:8px}
-.pred-btn{padding:4px 14px;border:1px solid var(--bd);background:var(--bg3);color:var(--tx2);border-radius:var(--r);font-size:10px;cursor:pointer;transition:all var(--tr);font-family:var(--fs)}
+.pred-btn{padding:5px 16px;border:1px solid var(--bd);background:var(--bg3);color:var(--tx2);border-radius:var(--r);font-size:12px;cursor:pointer;transition:all var(--tr);font-family:var(--fs)}
 .pred-btn:hover{border-color:var(--ac);color:var(--tx)}
 .pred-btn.sel-up{border-color:var(--up);background:var(--upB);color:var(--up)}
 .pred-btn.sel-dn{border-color:var(--dn);background:var(--dnB);color:var(--dn)}
 .pred-btn.sel-flat{border-color:var(--cy);background:rgba(0,229,255,0.12);color:var(--cy)}
-.pred-history{font-size:9px;color:var(--tx3);margin-top:8px}
-.pred-history .ph-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--bd)}
+.pred-history{font-size:11px;color:var(--tx3);margin-top:8px}
+.pred-history .ph-row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid var(--bd)}
 .pred-history .ph-correct{color:var(--dn)}.pred-history .ph-wrong{color:var(--up)}.pred-history .ph-pending{color:var(--ye)}
 .advice-box{background:var(--bg3);border:1px solid var(--bd);border-radius:var(--r);padding:10px 12px;margin-top:8px}
-.advice-box .av-main{font-family:var(--fm);font-size:14px;font-weight:700;margin-bottom:4px}
-.advice-box .av-detail{font-size:9px;color:var(--tx3);line-height:1.5}
+.advice-box .av-main{font-family:var(--fm);font-size:15px;font-weight:700;margin-bottom:5px}
+.advice-box .av-detail{font-size:12px;color:var(--tx3);line-height:1.5}
 .advice-box .av-signals{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
-.advice-signal{padding:2px 8px;border-radius:2px;font-size:8px;font-weight:600}
+.advice-signal{padding:3px 8px;border-radius:4px;font-size:11px;font-weight:600}
 .advice-signal.bull{background:var(--dnB);color:var(--dn)}
 .advice-signal.bear{background:var(--upB);color:var(--up)}
 .advice-signal.neutral{background:rgba(255,214,0,0.12);color:var(--ye)}
-.btn-sm{background:var(--bg3);border:1px solid var(--bd);color:var(--tx);padding:3px 8px;border-radius:var(--r);font-size:9px;cursor:pointer;transition:all var(--tr);font-family:var(--fs)}
+.btn-sm{background:var(--bg3);border:1px solid var(--bd);color:var(--tx);padding:4px 10px;border-radius:var(--r);font-size:11px;cursor:pointer;transition:all var(--tr);font-family:var(--fs)}
 .btn-sm:hover{background:var(--bdA);border-color:var(--ac)}
 .btn-sm.danger{color:var(--up);border-color:rgba(255,23,68,0.3)}
 .btn-sm.danger:hover{background:var(--upB)}
 .stock-mgmt{display:flex;align-items:center;gap:8px;padding:6px 12px;background:var(--bg2);border-bottom:1px solid var(--bd);flex-wrap:wrap}
-.stock-mgmt input{background:var(--bg);border:1px solid var(--bd);color:var(--tx);padding:4px 10px;border-radius:var(--r);font-family:var(--fm);font-size:10px;outline:none;width:120px}
+.stock-mgmt input{background:var(--bg);border:1px solid var(--bd);color:var(--tx);padding:5px 12px;border-radius:var(--r);font-family:var(--fm);font-size:12px;outline:none;width:130px}
 .stock-mgmt input:focus{border-color:var(--ac)}
-.stock-mgmt .mgmt-hint{font-size:9px;color:var(--tx3)}
+.stock-mgmt .mgmt-hint{font-size:11px;color:var(--tx3)}
 .tab .tab-del{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:transparent;color:var(--tx3);font-size:10px;cursor:pointer;margin-left:2px;transition:all var(--tr);line-height:1}
 .tab .tab-del:hover{background:var(--upB);color:var(--up)}
 @media(max-width:900px){.info-grid{grid-template-columns:1fr 1fr}.analysis-grid{grid-template-columns:1fr}.fin-grid{grid-template-columns:1fr 1fr}.fund-flow-grid{grid-template-columns:1fr 1fr}.tech-grid{grid-template-columns:1fr}}
@@ -206,7 +208,7 @@ const FINANCE = {
 // 财报简要分析(静态数据)
 const FINANCE_BRIEF = {
   "002475.SZ":{name:"立讯精密",code:"002475.SZ",
-    items:["2025年营收: 3,323.44亿元 (+23.64%)","归母净利润: 166.00亿元 (+24.20%)","毛利率: 11.92% (+0.74pcts)","合同负债: 9.31亿元 (+254%) — 先行指标预示订单充足","经营现金流: 173.25亿元 (净现比1.04)","2026H1预告: 净利润78.40-81.06亿 (+18%-22%)"],
+    items:["2025年营收: 3,323.44亿元 (+23.64%)","归母净利润: 166.00亿元 (+24.20%)","毛利率: 11.92% (+0.74pcts)","合同负债: 9.31亿元 (+254%) — 先行指标预示订单充足","经营现金流: 173.25亿元 (净现比1.04)","2026H1预告: 净利润78.40-81.06亿 (+18%-22%)","动态数据: 已接入东方财富/新浪财经/同花顺多源财务"],
     conclusion:"业绩拐点明确，AI光模块+汽车电子双轮驱动"},
   "002384.SZ":{name:"东山精密",code:"002384.SZ",
     items:["2025年营收: ~420亿元 (+28.5%)","归母净利润: ~32亿元 (+42%)","核心业务: FPC柔性电路板(苹果供应链核心), HDI高密度板, LED封装, 新能源汽车电子"],
@@ -867,6 +869,264 @@ function renderAdvice(ind, klData, d, f) {
 
 function v(val) { return val != null && !isNaN(val) ? val : null; }
 
+function fetchJson(url) {
+  return fetch(url).then(function(resp) { return resp.json(); });
+}
+
+function normSymbol(code) {
+  var raw = String(code || '').replace('.SZ', '').replace('.SH', '');
+  if (/^6/.test(raw)) return 'sh' + raw;
+  if (/^[035]/.test(raw)) return 'sz' + raw;
+  return 'sz' + raw;
+}
+
+function normalizeGrowthText(v) {
+  if (v == null || isNaN(v)) return '--';
+  return (v >= 0 ? '+' : '') + fmt(v, 2) + '%';
+}
+
+function parseAnnouncementSignals(items) {
+  items = items || [];
+  var text = items.map(function(it) { return String(it.title || '') + ' ' + String(it.type || ''); }).join(' | ');
+  var kws = ['业绩预告', '半年度', '中报', '预增', '预减', '扭亏', '减亏', '高于', '低于'];
+  return kws.filter(function(k) { return text.indexOf(k) >= 0; });
+}
+
+function buildEarningsAnalysis(code, data) {
+  var q = (data.quarterly && data.quarterly.items) || [];
+  var b = (data.balance && data.balance.items) || [];
+  var cf = (data.cashflow && data.cashflow.items) || [];
+  var ann = (data.announcements && data.announcements.items) || [];
+  var fc = (data.forecast && data.forecast.forecast && data.forecast.forecast.items) || [];
+  var ex = (data.forecast && data.forecast.express && data.forecast.express.items) || [];
+  var rp = (data.forecast && data.forecast.report && data.forecast.report.items) || [];
+  var indicators = (data.indicators && data.indicators.items) || [];
+
+  var latest = q[0] || {};
+  var annSignals = parseAnnouncementSignals(ann);
+
+  var revYoY = latest.operateIncomeGrowth != null ? latest.operateIncomeGrowth : latest.revenueYoY;
+  var npYoY = latest.parentNetProfitGrowth != null ? latest.parentNetProfitGrowth : latest.netProfitGrowth;
+  var gross = latest.grossMargin;
+  var roe = latest.roe;
+
+  var ocf = cf[0] || {};
+  var bs = b[0] || {};
+  var cashVsProfit = (ocf.operateCashFlow != null && latest.parentNetProfit != null && latest.parentNetProfit !== 0)
+    ? ocf.operateCashFlow / latest.parentNetProfit
+    : null;
+  var debtRatio = null;
+  if (bs.totalLiabilities != null && bs.totalAssets != null && bs.totalAssets !== 0) {
+    debtRatio = bs.totalLiabilities / bs.totalAssets;
+  }
+
+  // ===== Find 2026 H1 forecast / express / report =====
+  var h1Forecast = null, h1Express = null, h1Report = null;
+  for (var i = 0; i < fc.length; i++) {
+    var item = fc[i];
+    var date = item['预告日期'] || item['公告日期'] || item['数据日期'] || '';
+    var type = item['预告类型'] || '';
+    if (String(date).indexOf('2026') >= 0 || String(type).indexOf('2026') >= 0 || String(type).indexOf('半年度') >= 0 || String(type).indexOf('中报') >= 0) {
+      h1Forecast = item; break;
+    }
+  }
+  if (!h1Forecast && fc.length > 0) h1Forecast = fc[0];
+
+  for (var i = 0; i < ex.length; i++) {
+    var item = ex[i];
+    var date = item['公告日期'] || item['业绩快报日期'] || '';
+    if (String(date).indexOf('2026') >= 0) { h1Express = item; break; }
+  }
+  if (!h1Express && ex.length > 0) h1Express = ex[0];
+
+  for (var i = 0; i < rp.length; i++) {
+    var item = rp[i];
+    var date = item['公告日期'] || item['报表期'] || '';
+    if (String(date).indexOf('2026') >= 0) { h1Report = item; break; }
+  }
+  if (!h1Report && rp.length > 0) h1Report = rp[0];
+
+  // ===== Parse forecast =====
+  var forecastType = h1Forecast ? (h1Forecast['预告类型'] || h1Forecast['类型'] || '未知') : '暂无预告';
+  var forecastRange = '', forecastReason = '';
+  if (h1Forecast) {
+    var change = h1Forecast['业绩变动幅度'] || h1Forecast['净利润变动幅度'] || h1Forecast['变动幅度'] || '';
+    var minP = h1Forecast['预告净利润下限'] || h1Forecast['净利润下限'] || '';
+    var maxP = h1Forecast['预告净利润上限'] || h1Forecast['净利润上限'] || '';
+    if (change) forecastRange = String(change);
+    else if (minP || maxP) forecastRange = String(minP) + ' ~ ' + String(maxP);
+    forecastReason = h1Forecast['业绩变动原因'] || h1Forecast['变动原因'] || '';
+  }
+
+  var expressRev = null, expressRevYoY = null, expressNp = null, expressNpYoY = null;
+  if (h1Express) {
+    expressRev = h1Express['营业收入'] || h1Express['营业总收入'] || null;
+    expressRevYoY = h1Express['营业收入同比增长率'] || h1Express['营收同比'] || h1Express['营业收入同比'] || null;
+    expressNp = h1Express['净利润'] || h1Express['归母净利润'] || null;
+    expressNpYoY = h1Express['净利润同比增长率'] || h1Express['净利同比'] || h1Express['净利润同比'] || null;
+  }
+
+  // ===== Scoring =====
+  var score = 0;
+  if (revYoY != null) score += revYoY > 0.15 ? 2 : revYoY > 0.05 ? 1 : -1;
+  if (npYoY != null) score += npYoY > 0.2 ? 2 : npYoY > 0.08 ? 1 : -1;
+  if (cashVsProfit != null) score += cashVsProfit > 1 ? 2 : cashVsProfit > 0.8 ? 1 : -1;
+  if (gross != null) score += gross > 20 ? 1 : gross < 10 ? -1 : 0;
+  if (debtRatio != null) score += debtRatio < 0.5 ? 1 : debtRatio > 0.7 ? -1 : 0;
+
+  var forecastPositive = /预增|扭亏|减亏|上升|增长|大幅/.test(forecastType);
+  var forecastNegative = /预减|亏损|下降|下滑|预亏/.test(forecastType);
+  if (forecastPositive) score += 1;
+  if (forecastNegative) score -= 1;
+  if (h1Express && expressNpYoY != null) {
+    score += expressNpYoY > 0.2 ? 2 : expressNpYoY > 0 ? 1 : -1;
+  }
+  if (annSignals.indexOf('预增') >= 0 || annSignals.indexOf('半年度') >= 0 || annSignals.indexOf('中报') >= 0) score += 1;
+
+  // ===== Real growth quality =====
+  var realGrowthQuality = '', qualityClass = '';
+  if (score >= 5) { realGrowthQuality = '有真实业绩增长，现金流/利润匹配度较好，预告/快报验证度高'; qualityClass = '--up'; }
+  else if (score >= 3) { realGrowthQuality = '存在真实增长，但还要看中报兑现质量，建议结合现金流和毛利率变化'; qualityClass = '--cy'; }
+  else if (score >= 0) { realGrowthQuality = '增长一般，更偏主题或周期修复，需验证持续性'; qualityClass = '--ye'; }
+  else { realGrowthQuality = '当前更像预期驱动，真实增长支撑不足，注意风险'; qualityClass = '--dn'; }
+
+  // ===== Beat forecast analysis =====
+  var beatProb = '未知', beatReason = '';
+  if (h1Forecast && h1Express) {
+    var fMin = parseFloat(h1Forecast['预告净利润下限'] || h1Forecast['净利润下限']);
+    var fMax = parseFloat(h1Forecast['预告净利润上限'] || h1Forecast['净利润上限']);
+    var actNp = parseFloat(h1Express['净利润'] || h1Express['归母净利润']);
+    if (!isNaN(fMin) && !isNaN(actNp)) {
+      if (actNp >= fMin) { beatProb = '已兑现/高于预告'; beatReason = '快报净利润' + fmM(actNp) + '，落在预告区间上方'; }
+      else { beatProb = '低于预告区间'; beatReason = '快报净利润未达预告下限，关注正式中报修正'; }
+    } else { beatProb = '数据不足'; beatReason = '缺少可比数值'; }
+  } else if (h1Forecast && !h1Express) {
+    if (score >= 5) { beatProb = '较高概率'; beatReason = '基本面扎实+预告积极，历史兑现度通常较好'; }
+    else if (score >= 2) { beatProb = '中等概率'; beatReason = '预告偏积极，但需关注二季度末订单和回款'; }
+    else { beatProb = '偏低概率'; beatReason = '基本面支撑不足，预告下限可能承压'; }
+  } else if (h1Express) { beatProb = '已披露快报'; beatReason = '业绩快报已发布，可直接参考快报数据'; }
+  else { beatProb = '待披露'; beatReason = '2026年中报/预告尚未发布，等待后续公告'; }
+
+  // ===== H2 trend prediction =====
+  var trendDir = '', trendDetail = '';
+  var actualNpYoY = expressNpYoY || (h1Report ? (h1Report['净利润同比增长率'] || h1Report['净利同比']) : null);
+  if (actualNpYoY != null) {
+    if (actualNpYoY > 0.3) { trendDir = 'H2有望延续高增长'; trendDetail = '上半年净利同比+' + (actualNpYoY*100).toFixed(1) + '%，若下游需求不逆转，全年高增长确定性较高'; }
+    else if (actualNpYoY > 0.1) { trendDir = 'H2温和增长'; trendDetail = '上半年净利同比+' + (actualNpYoY*100).toFixed(1) + '%，下半年关注旺季/订单爬坡能否加速'; }
+    else if (actualNpYoY > 0) { trendDir = 'H2分化修复'; trendDetail = '上半年微增，下半年取决于行业景气度和公司订单节奏'; }
+    else { trendDir = 'H2承压'; trendDetail = '上半年同比下滑，下半年若不能扭转，全年业绩存在下修风险'; }
+  } else if (h1Forecast) {
+    if (forecastPositive) { trendDir = 'H2大概率向好'; trendDetail = '预告偏积极，若上半年趋势延续，下半年有望保持'; }
+    else if (forecastNegative) { trendDir = 'H2谨慎'; trendDetail = '预告偏负面，下半年需观察是否有边际改善信号'; }
+    else { trendDir = 'H2中性'; trendDetail = '预告信号不明确，等待更多数据验证'; }
+  } else { trendDir = '待披露'; trendDetail = '2026年中报/预告尚未发布，建议关注后续公告'; }
+
+  var direction = score >= 4 ? '高增长延续' : score >= 2 ? '温和增长' : score >= 0 ? '分化修复' : '增长承压';
+
+  var coreItems = [];
+  if (latest.reportDate) coreItems.push('最新报表期: ' + latest.reportDate);
+  if (revYoY != null) coreItems.push('营收同比: ' + normalizeGrowthText(revYoY));
+  if (npYoY != null) coreItems.push('归母净利同比: ' + normalizeGrowthText(npYoY));
+  if (gross != null) coreItems.push('毛利率: ' + fmt(gross, 2) + '%');
+  if (roe != null) coreItems.push('ROE: ' + fmt(roe, 2) + '%');
+  if (cashVsProfit != null) coreItems.push('经营现金流/净利: ' + fmt(cashVsProfit, 2) + 'x');
+  if (debtRatio != null) coreItems.push('资产负债率: ' + fmt(debtRatio * 100, 1) + '%');
+
+  var forecastItems = [];
+  if (h1Forecast) {
+    forecastItems.push('预告类型: ' + forecastType);
+    if (forecastRange) forecastItems.push('变动幅度: ' + forecastRange);
+    if (forecastReason) forecastItems.push('变动原因: ' + forecastReason.substring(0, 80) + (forecastReason.length > 80 ? '...' : ''));
+  } else { forecastItems.push('暂无2026年中期业绩预告'); }
+  if (h1Express) {
+    if (expressRev != null) forecastItems.push('快报营收: ' + fmM(expressRev));
+    if (expressRevYoY != null) forecastItems.push('快报营收同比: ' + normalizeGrowthText(expressRevYoY));
+    if (expressNp != null) forecastItems.push('快报净利润: ' + fmM(expressNp));
+    if (expressNpYoY != null) forecastItems.push('快报净利同比: ' + normalizeGrowthText(expressNpYoY));
+  }
+  if (h1Report) {
+    var rRev = h1Report['营业收入'] || h1Report['营业总收入'] || null;
+    var rNp = h1Report['净利润'] || h1Report['归母净利润'] || null;
+    if (rRev != null) forecastItems.push('报表营收: ' + fmM(rRev));
+    if (rNp != null) forecastItems.push('报表净利润: ' + fmM(rNp));
+  }
+
+  var risk = [];
+  if (npYoY != null && npYoY < 0) risk.push('利润同比转弱');
+  if (cashVsProfit != null && cashVsProfit < 0.8) risk.push('现金流弱于利润');
+  if (debtRatio != null && debtRatio > 0.7) risk.push('杠杆偏高');
+  if (annSignals.length === 0 && !h1Forecast) risk.push('缺少明确中报/预告线索');
+  if (forecastNegative) risk.push('业绩预告偏负面(' + forecastType + ')');
+
+  var sources = [];
+  if (h1Forecast) sources.push('东方财富-预报');
+  if (h1Express) sources.push('东方财富-快报');
+  if (h1Report) sources.push('东方财富-报表');
+  if (indicators.length) sources.push('AKShare-财务');
+  if (ann.length) sources.push('公告');
+
+  return '' +
+    '<div class="card" style="margin-bottom:8px">' +
+      '<div class="card-hd"><div class="card-hd-l"><span class="d" style="background:var(--cy);box-shadow:0 0 6px rgba(0,229,255,0.5)"></span>2026中报与业绩预告深度分析</div><span style="font-size:9px;color:var(--tx3)">多源: ' + (sources.join('+') || '本地分析') + '</span></div>' +
+      '<div class="card-bd">' +
+        '<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">' +
+          '<div style="flex:1;min-width:140px;background:var(--bg);border-radius:var(--r);padding:8px 10px;text-align:center;border:1px solid var(--bd)">' +
+            '<div style="font-size:9px;color:var(--tx3);margin-bottom:4px">业绩方向</div>' +
+            '<div style="font-family:var(--fm);font-size:16px;font-weight:700;color:' + (score >= 4 ? 'var(--up)' : score >= 2 ? 'var(--cy)' : score >= 0 ? 'var(--ye)' : 'var(--dn)') + '">' + direction + '</div>' +
+          '</div>' +
+          '<div style="flex:1;min-width:140px;background:var(--bg);border-radius:var(--r);padding:8px 10px;text-align:center;border:1px solid var(--bd)">' +
+            '<div style="font-size:9px;color:var(--tx3);margin-bottom:4px">真实增长质量</div>' +
+            '<div style="font-family:var(--fm);font-size:14px;font-weight:700;color:var(' + qualityClass + ')">' + (score >= 5 ? '优' : score >= 3 ? '良' : score >= 0 ? '中' : '弱') + '</div>' +
+            '<div style="font-size:8px;color:var(--tx3);margin-top:2px;line-height:1.4">' + realGrowthQuality + '</div>' +
+          '</div>' +
+          '<div style="flex:1;min-width:140px;background:var(--bg);border-radius:var(--r);padding:8px 10px;text-align:center;border:1px solid var(--bd)">' +
+            '<div style="font-size:9px;color:var(--tx3);margin-bottom:4px">能否高于预测</div>' +
+            '<div style="font-family:var(--fm);font-size:14px;font-weight:700;color:' + (beatProb.indexOf('高') >= 0 || beatProb.indexOf('已兑现') >= 0 ? 'var(--up)' : beatProb.indexOf('中') >= 0 ? 'var(--cy)' : 'var(--dn)') + '">' + beatProb + '</div>' +
+            '<div style="font-size:8px;color:var(--tx3);margin-top:2px;line-height:1.4">' + beatReason + '</div>' +
+          '</div>' +
+          '<div style="flex:1;min-width:140px;background:var(--bg);border-radius:var(--r);padding:8px 10px;text-align:center;border:1px solid var(--bd)">' +
+            '<div style="font-size:9px;color:var(--tx3);margin-bottom:4px">H2趋势预测</div>' +
+            '<div style="font-family:var(--fm);font-size:14px;font-weight:700;color:' + (trendDir.indexOf('向好') >= 0 || trendDir.indexOf('延续') >= 0 ? 'var(--up)' : trendDir.indexOf('承压') >= 0 ? 'var(--dn)' : 'var(--cy)') + '">' + trendDir + '</div>' +
+            '<div style="font-size:8px;color:var(--tx3);margin-top:2px;line-height:1.4">' + trendDetail + '</div>' +
+          '</div>' +
+        '</div>' +
+        '<div class="analysis-grid">' +
+          '<div class="analysis-card">' +
+            '<h4>核心财务指标</h4>' +
+            '<ul>' + coreItems.map(function(it) { return '<li>' + it + '</li>'; }).join('') + '</ul>' +
+          '</div>' +
+          '<div class="analysis-card">' +
+            '<h4>2026中期业绩预报/快报</h4>' +
+            '<ul>' + forecastItems.map(function(it) { return '<li>' + it + '</li>'; }).join('') + '</ul>' +
+          '</div>' +
+        '</div>' +
+        '<div class="analysis-grid" style="margin-top:8px">' +
+          '<div class="analysis-card">' +
+            '<h4>公告线索</h4>' +
+            '<p>' + (annSignals.length ? annSignals.join('，') : '暂未抓到明确公告信号') + '</p>' +
+            (h1Forecast ? '<p style="margin-top:6px;font-size:9px;color:var(--tx3)">预告日期: ' + (h1Forecast['预告日期'] || h1Forecast['公告日期'] || '--') + '</p>' : '') +
+          '</div>' +
+          '<div class="analysis-card">' +
+            '<h4>主要风险</h4>' +
+            '<ul>' + (risk.length ? risk.map(function(it) { return '<li>' + it + '</li>'; }).join('') : '<li>暂无明显风险信号</li>') + '</ul>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+}
+
+function loadEarningsSection(code) {
+  var box = document.getElementById('earnings-card-' + code);
+  if (!box) return;
+  var symbol = normSymbol(code);
+  fetchJson('/api/fundamental/comprehensive?symbol=' + encodeURIComponent(symbol))
+    .then(function(data) {
+      box.outerHTML = buildEarningsAnalysis(code, data);
+    }).catch(function() {
+      box.outerHTML = '<div class="card" style="margin-bottom:8px"><div class="card-bd"><div style="text-align:center;padding:16px;color:var(--tx3);font-size:10px">业绩分析加载失败，请稍后重试</div></div></div>';
+    });
+}
+
 // ============================================================
 // 异步加载额外section（技术指标、回撤、操作记录、预测、操作建议）
 // ============================================================
@@ -885,11 +1145,13 @@ function loadExtraSections(code, d, f) {
       ind = calcAll(klData);
     }
     extra.innerHTML = '' +
+      '<div id="earnings-card-' + code + '"><div class="card" style="margin-bottom:8px"><div class="card-bd"><div style="text-align:center;padding:16px;color:var(--tx3);font-size:10px">2026中报与业绩预告分析加载中...</div></div></div></div>' +
       '<div id="tech-card-' + code + '">' + renderTechIndicators(ind, klData) + '</div>' +
       renderDrawdown(d) +
       '<div id="ops-card-' + code + '">' + renderOperations(code) + '</div>' +
       '<div id="pred-card-' + code + '">' + renderPrediction(code) + '</div>' +
       '<div id="advice-card-' + code + '">' + renderAdvice(ind, klData, d, f) + '</div>';
+    loadEarningsSection(code);
   }).catch(function() {
     extra.innerHTML = '<div style="text-align:center;padding:16px;color:var(--tx3);font-size:10px">数据加载失败，请稍后重试</div>';
   });
@@ -1003,7 +1265,7 @@ function renderStock() {
     '</div>' +
     '<!-- 财报简要分析 -->' +
     (fb ? '<div class="card" style="margin-bottom:8px">' +
-      '<div class="card-hd"><div class="card-hd-l"><span class="d" style="background:var(--dn);box-shadow:0 0 6px rgba(0,200,83,0.5)"></span>财报简要分析</div><span style="font-size:9px;color:var(--tx3)">基于2025年报及最新数据</span></div>' +
+      '<div class="card-hd"><div class="card-hd-l"><span class="d" style="background:var(--dn);box-shadow:0 0 6px rgba(0,200,83,0.5)"></span>财报简要分析</div><span style="font-size:9px;color:var(--tx3)">基于2025年报及2026H1最新数据</span></div>' +
       '<div class="card-bd">' +
         '<div style="font-size:10px;color:var(--tx2);line-height:1.8">' +
           fb.items.map(function(it) { return '<div style="margin-bottom:3px">• ' + it + '</div>'; }).join('') +
@@ -1047,7 +1309,7 @@ function renderStock() {
     '</div>' : '') +
     '<!-- 财务数据分析 -->' +
     '<div class="card" style="margin-bottom:8px">' +
-      '<div class="card-hd"><div class="card-hd-l"><span class="d" style="background:var(--bl);box-shadow:0 0 6px rgba(41,121,255,0.5)"></span>财务数据分析</div><span style="font-size:9px;color:var(--tx3)">静态摘要 · 待接财报接口</span></div>' +
+      '<div class="card-hd"><div class="card-hd-l"><span class="d" style="background:var(--bl);box-shadow:0 0 6px rgba(41,121,255,0.5)"></span>财务数据分析</div><span style="font-size:9px;color:var(--tx3)">动态多源 · 东方财富+新浪财经+同花顺</span></div>' +
       '<div class="card-bd">' +
         '<div class="fin-grid">' +
           '<div class="fin-card"><div class="fl">市盈率(PE)</div><div class="fv">' + fmt(f.pe, 1) + '</div><div class="fs">' + (f.pe < 20 ? '估值偏低' : f.pe < 40 ? '估值合理' : '估值偏高') + '</div></div>' +

@@ -16,7 +16,7 @@ from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
 
-from backend.config import A_INDEX_CODES, ETF_LIST, PORTFOLIO
+from backend.config import A_INDEX_CODES, ETF_LIST, PORTFOLIO, GLOBAL_INDEX_CODES
 from backend.services.market_service import market_service
 
 # 七层数据源
@@ -299,6 +299,47 @@ class DataHubService:
             sym = with_prefix(symbol)
             errors: list[dict] = []
             quote = None
+
+            # 全球指数：走 AKShare 实时行情，不使用 A 股行情源
+            raw_code = str(symbol).strip().upper()
+            if raw_code in GLOBAL_INDEX_CODES or raw_code in {"KS11", "N225", "HSI", "HSTECH", "GDAXI", "VIX"}:
+                try:
+                    item = market_service._fetch_global_index_spot(raw_code)
+                    if item and item.get("close") is not None:
+                        quote = {
+                            "symbol": raw_code,
+                            "name": item.get("name", raw_code),
+                            "current": item.get("close"),
+                            "prevClose": item.get("prev_close"),
+                            "open": item.get("open"),
+                            "high": item.get("high"),
+                            "low": item.get("low"),
+                            "volume": item.get("volume", 0),
+                            "amount": item.get("amount", 0),
+                            "changePct": item.get("change_pct"),
+                            "source": item.get("source", "akshare"),
+                        }
+                except Exception as exc:
+                    errors.append({"source": "akshare-global", "symbol": raw_code, "message": str(exc)})
+                if quote and quote.get("current") is not None:
+                    as_of = DEFAULT_AS_OF
+                    try:
+                        daily = market_service._fetch_global_index_kline(raw_code, days=5)
+                        if daily:
+                            as_of = daily[-1].get("date") or DEFAULT_AS_OF
+                    except Exception:
+                        pass
+                    quote.update({
+                        "updatedAt": now_text(),
+                        "asOf": as_of,
+                        "freshness": "realtime",
+                        "stale": False,
+                        "unavailable": False,
+                        "errors": errors,
+                    })
+                    rows[raw_code] = quote
+                    continue
+
             # 使用新行情数据源（mootdx 含五档盘口 > 腾讯 含PE/PB/市值）
             try:
                 quote = market_source.get_quote(sym)
@@ -378,7 +419,7 @@ class DataHubService:
         index_quotes = self.normalize_quotes(list(TERMINAL_INDEXES.keys()))
         etf_quotes = self.normalize_quotes(list(self._etf_symbol_map().values()))
 
-        # 行业资金流（东财）
+        # 行业资金流（东财直连，失败时回落本地快照）
         sector_result = fundflow_source.eastmoney_sector_fundflow()
         sector_live = sector_result.get("items", [])
         sector_errors = [{"source": sector_result["source"], "message": sector_result.get("error", "")}] if sector_result.get("error") else []

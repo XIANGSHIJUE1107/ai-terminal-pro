@@ -19,6 +19,114 @@ from backend.config import PORTFOLIO, A_INDEX_CODES, GLOBAL_INDEX_CODES
 class MarketService:
     """市场数据查询服务"""
 
+    # 全球指数 AKShare 名称映射（index_global_hist_sina 使用中文名称作为 symbol）
+    _GLOBAL_HIST_NAME_MAP = {
+        "KS11": "首尔综合指数",
+        "N225": "日经225指数",
+        "TWII": "台湾加权指数",
+        "AS51": "澳大利亚标准普尔200指数",
+        "SENSEX": "印度孟买SENSEX指数",
+        "IBOV": "巴西BOVESPA股票指数",
+        "MXX": "墨西哥BOLSA指数",
+        "GSPTSE": "加拿大S&P/TSX综合指数",
+        "UKX": "英国富时100指数",
+        "DAX": "德国DAX 30种股价指数",
+        "CAC": "法CAC40指数",
+        "SX5E": "欧洲Stoxx50指数",
+    }
+
+    @classmethod
+    def _fetch_global_index_spot(cls, code: str) -> dict | None:
+        """通过 AKShare 获取全球指数实时行情"""
+        try:
+            import akshare as ak
+            df = ak.index_global_spot_em()
+            if df is None or df.empty:
+                return None
+            mask = df["代码"] == code
+            if not mask.any():
+                mask = df["名称"].str.contains(code, case=False, na=False)
+            if not mask.any():
+                return None
+            row = df.loc[mask].iloc[0]
+            close = float(row.get("最新价", 0) or 0)
+            prev_close = float(row.get("昨收价", close) or close)
+            change_pct = float(row.get("涨跌幅", 0) or 0)
+            return {
+                "code": code,
+                "name": str(row.get("名称", GLOBAL_INDEX_CODES.get(code, code))).strip(),
+                "close": round(close, 2),
+                "open": round(float(row.get("开盘价", close) or close), 2),
+                "high": round(float(row.get("最高价", close) or close), 2),
+                "low": round(float(row.get("最低价", close) or close), 2),
+                "prev_close": round(prev_close, 2),
+                "change_pct": round(change_pct, 2),
+                "volume": 0,
+                "amount": 0,
+                "source": "akshare-spot",
+                "time": str(row.get("最新行情时间", "")),
+            }
+        except Exception as e:
+            print(f"[MarketService] AKShare 获取 {code} 实时行情失败: {e}")
+            return None
+
+    @classmethod
+    def _fetch_global_index_kline(cls, code: str, days: int = 120) -> list[dict]:
+        """通过 AKShare 获取全球指数历史 K 线"""
+        hist_name = cls._GLOBAL_HIST_NAME_MAP.get(code)
+        if not hist_name:
+            return []
+        try:
+            import akshare as ak
+            import pandas as pd
+            df = ak.index_global_hist_sina(symbol=hist_name)
+            if df is None or df.empty:
+                return []
+            col_map = {"date": "date", "open": "open", "high": "high", "low": "low", "close": "close", "volume": "volume"}
+            df = df.rename(columns=col_map)
+            keep = [c for c in ["date", "open", "high", "low", "close", "volume"] if c in df.columns]
+            df = df[keep].tail(days)
+            df["date"] = pd.to_datetime(df["date"]).dt.strftime("%Y-%m-%d")
+            rows = []
+            for _, row in df.iterrows():
+                rows.append({
+                    "date": str(row["date"]),
+                    "open": round(float(row["open"]), 2),
+                    "high": round(float(row["high"]), 2),
+                    "low": round(float(row["low"]), 2),
+                    "close": round(float(row["close"]), 2),
+                    "volume": int(row.get("volume", 0)) if not pd.isna(row.get("volume")) else 0,
+                    "amount": 0,
+                })
+            return rows
+        except Exception as e:
+            print(f"[MarketService] AKShare 获取 {code} K线失败: {e}")
+            return []
+
+    @staticmethod
+    def _index_row_from_db(conn, code: str, name: str) -> dict | None:
+        rows = conn.execute(
+            "SELECT * FROM index_daily WHERE code=? ORDER BY date DESC LIMIT 2",
+            (code,)
+        ).fetchall()
+        if not rows:
+            return None
+        latest = dict(rows[0])
+        prev = dict(rows[1]) if len(rows) > 1 else latest
+        change_pct = ((latest["close"] - prev["close"]) / prev["close"] * 100) if prev["close"] else 0
+        return {
+            "code": code, "name": name or latest.get("name", code),
+            "close": round(latest["close"], 2),
+            "open": round(latest.get("open", latest["close"]), 2),
+            "high": round(latest.get("high", latest["close"]), 2),
+            "low": round(latest.get("low", latest["close"]), 2),
+            "prev_close": round(prev["close"], 2),
+            "change_pct": round(change_pct, 2),
+            "volume": int(latest.get("volume", 0) or 0),
+            "amount": round(float(latest.get("amount", 0) or 0), 0),
+            "source": "db",
+        }
+
     # ============ 市场概览 ============
 
     @staticmethod
@@ -29,19 +137,19 @@ class MarketService:
 
         # A股指数
         for code, name in A_INDEX_CODES.items():
-            row = conn.execute(
-                "SELECT * FROM index_daily WHERE code=? ORDER BY date DESC LIMIT 2",
-                (code,)
-            ).fetchall()
+            row = MarketService._index_row_from_db(conn, code, name)
             if row:
-                latest = dict(row[0])
-                prev = dict(row[1]) if len(row) > 1 else latest
-                change_pct = ((latest["close"] - prev["close"]) / prev["close"] * 100) if prev["close"] else 0
-                result["a_shares"].append({
-                    "code": code, "name": name,
-                    "close": round(latest["close"], 2),
-                    "change_pct": round(change_pct, 2),
-                })
+                result["a_shares"].append(row)
+
+        # 全球指数（DB 优先，缺失/陈旧时通过 AKShare 补全）
+        for code, name in GLOBAL_INDEX_CODES.items():
+            row = MarketService._index_row_from_db(conn, code, name)
+            if not row:
+                row = MarketService._fetch_global_index_spot(code)
+            result["global"].append(row or {
+                "code": code, "name": name, "close": None, "change_pct": None,
+                "source": "unavailable",
+            })
 
         conn.close()
         return result

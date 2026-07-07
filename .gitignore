@@ -1,0 +1,79 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Virtual environments
+venv/
+env/
+ENV/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.trae/
+
+# Logs
+*.log
+backend.log
+backend_err.log
+server.log
+server_debug.log
+netstat_out.txt
+conn_result.txt
+api_test.txt
+quotes_error.txt
+quotes_output.json
+api_test.txt
+
+# Generated data caches
+datahub_snapshots/
+kline_cache/
+*.db
+*.sqlite
+*.sqlite3
+
+# Test outputs
+test_*_out.txt
+test_*.txt
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Node.js
+node_modules/
+.next/
+out/
+*.lock
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Temporary files
+*.tmp
+*.bak
+*.orig
